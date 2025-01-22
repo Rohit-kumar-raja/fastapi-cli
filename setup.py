@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="fpcli",
     version="0.1.6",
-    description="A simple example package",
+    description="This the simple command line interface using this package  you can easly integrate the command line interface for fastapi which is developed into the typer package ",
     author="Rohit kumar",
     packages=find_packages(include=["fpcli", "fpcli.*"]),
     install_requires=['typer'],  # Add dependencies here
