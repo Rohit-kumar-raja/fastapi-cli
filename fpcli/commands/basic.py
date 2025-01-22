@@ -2,11 +2,11 @@ from operator import truediv
 from wsgiref.simple_server import make_server
 from pathlib import Path
 import typer
-from cli.content.cli_content import *
-from cli.function.check_class import check_class
-from cli.function.check_app import check_app
-from cli.function.basic import make_controller, make_model, make_routes, make_service, make_validator
-from cli.function.check_app import  is_exits
+from ..content.cli_content import *
+from ..function.check_class import check_class
+from ..function.check_app import check_app
+from ..function.basic import make_controller, make_model, make_routes, make_service, make_validator
+from ..function.check_app import  is_exits
 
 app= typer.Typer()
 

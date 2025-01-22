@@ -1,7 +1,7 @@
 import typer
-from cli.content.cli_content import *
-from cli.function.check_class import check_class
-from cli.function.check_app import check_app
+from ..content.cli_content import *
+from ..function.check_class import check_class
+from ..function.check_app import check_app
 
 def make_controller(name: str, app_name: str ):
  
