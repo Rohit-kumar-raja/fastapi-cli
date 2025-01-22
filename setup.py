@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="fastapi-cli",
+    name="fpcli",
     version="0.1.0",
     description="A simple example package",
     author="Rohit kumar",

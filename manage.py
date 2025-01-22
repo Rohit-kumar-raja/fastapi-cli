@@ -1,5 +1,5 @@
 import typer
-from cli.commands.basic import *
+from cli import *
 
 @app.callback(invoke_without_command=True)
 def main(ctx: typer.Context):
