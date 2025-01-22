@@ -267,23 +267,6 @@ class {class_name}:
     '''
 
 
-def app_folders():
-   return [
-        "commands",
-        "helpers",
-        "http/v1/controllers",
-        "http/v1/responses",
-        "http/v1/validators",
-        "middleware",
-        "models",
-        "services",
-    ]
-
-def app_files():
-   return [
-        "config.py",
-        "http/v1/urls.py",
-    ]
 
 
 def get_route_content(controller_name: str, method: str, route_name: str):

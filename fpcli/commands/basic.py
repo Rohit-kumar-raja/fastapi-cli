@@ -151,25 +151,7 @@ def make_seeder(name: str,app_name:str):
     file_path.write_text(content)
     typer.echo(f"Seeder '{class_name}' created successfully in '{file_path}'!")
 
-@app.command("startapp")
-def create_app_structure(app_name: str):
-    """
-    Create an app for FastApi structure with top-level files, including urls.py.
-    """
-    app_name="_"+app_name
-    is_exits(app_name=app_name)
-    # Create folders
-    for folder in app_folders():
-        path = Path(app_name) / folder
-        path.mkdir(parents=True, exist_ok=True)
-        
 
-    # Create top-level files
-    for file in app_files():
-        path = Path(app_name) / file
-        if not path.exists():
-            path.touch()
-    typer.echo(typer.style(f"App Created Successfully: {app_name}",typer.colors.GREEN,bold=True))
    
 @app.command("make:routes")
 def create_routes(name: str, app_name: str, routes: str):

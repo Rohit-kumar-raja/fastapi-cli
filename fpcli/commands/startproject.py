@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import typer
+from ..content.startproject import get_api_contant, get_console_content, get_database_contant, get_helper_utilities_content, get_loging_contant, get_manage_contant, get_server_contant, get_urls_contant, get_welcome_controller_contant
 from .basic import app
 
 
@@ -25,9 +26,6 @@ def create_folder_structure(base_dir: str):
         "database/migrations",
         "database/seeders",
         "routes",
-        "storage/cli/commands",
-        "storage/cli/content",
-        "storage/cli/function",
         "storage/logs",
         "tests"
     ]
@@ -35,35 +33,36 @@ def create_folder_structure(base_dir: str):
     files = {
         f"{base_dir}/app/commands/__init__.py": "",
         f"{base_dir}/app/config.py": "# Configuration file",
+        f"{base_dir}/app/urls.py": "# all routes file\n"+get_urls_contant(),
         f"{base_dir}/app/helpers/__init__.py": "",
-        f"{base_dir}/app/helpers/utils.py": "# Utility functions",
+        f"{base_dir}/app/helpers/utils.py": "# Utility functions"+get_helper_utilities_content(),
         f"{base_dir}/app/http/v1/controllers/__init__.py": "",
+        f"{base_dir}/app/http/v1/controllers/welcome_controller.py": "#Welcome Controller  "+get_welcome_controller_contant(),
         f"{base_dir}/app/http/v1/responses/__init__.py": "",
         f"{base_dir}/app/http/v1/validators/__init__.py": "",
         f"{base_dir}/app/middleware/__init__.py": "",
         f"{base_dir}/app/models/__init__.py": "",
         f"{base_dir}/app/services/__init__.py": "",
         f"{base_dir}/config/__init__.py": "",
-        f"{base_dir}/config/database.py": "# Database Configuration",
-        f"{base_dir}/config/logging.py": "# Logging Configuration",
+        f"{base_dir}/config/database.py": "# Database Configuration\n"+get_database_contant(),
+        f"{base_dir}/config/logging.py": "# Logging Configuration\n"+get_loging_contant(),
         f"{base_dir}/config/settings.py": "# Settings Configuration",
         f"{base_dir}/database/__init__.py": "",
         f"{base_dir}/database/migrations/__init__.py": "",
         f"{base_dir}/database/migrations/migration_file.py": "# Migration File",
         f"{base_dir}/database/run_seeders.py": "# Run Seeders",
         f"{base_dir}/database/seeders/__init__.py": "",
-        f"{base_dir}/routes/api.py": "# API Routes",
+        f"{base_dir}/routes/api.py": "# API Routes\n"+get_api_contant(),
         f"{base_dir}/routes/channel.py": "# Channel Routes",
-        f"{base_dir}/routes/console.py": "# Console Routes",
-        f"{base_dir}/server.py": "# Entry point",
+        f"{base_dir}/routes/console.py": "# Console Routes\n"+get_console_content(),
+        f"{base_dir}/server.py": "# Entry point\n"+get_server_contant(),
+        f"{base_dir}/manage.py": "# Entry point\n"+get_manage_contant(),
         f"{base_dir}/storage/logs/app.log": "",
         f"{base_dir}/storage/logs/error.log": "",
         f"{base_dir}/tests/__init__.py": "",
         f"{base_dir}/README.md": "# Project Readme",
         f"{base_dir}/Dockerfile": "# Dockerfile",
         f"{base_dir}/docker-compose.yml": "# Docker Compose Configuration",
-        f"{base_dir}/pyproject.toml": "# pyproject.toml",
-        f"{base_dir}/Guidelines.md": "# Guidelines",
     }
 
     # Create folders
@@ -74,7 +73,7 @@ def create_folder_structure(base_dir: str):
     for file, content in files.items():
         create_file(file, content)
     
-@app.command()
+@app.command("startproject")
 def startproject(name: str):
     """Create a new project structure."""
     base_dir = Path(name).resolve()
