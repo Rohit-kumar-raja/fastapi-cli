@@ -1,5 +1,4 @@
-from operator import truediv
-from wsgiref.simple_server import make_server
+
 from pathlib import Path
 import typer
 from ..content.cli_content import *

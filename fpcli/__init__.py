@@ -1,4 +1,4 @@
-from .commands.basic import *
+from .commands import *
 @app.callback(invoke_without_command=True)
 def main(ctx: typer.Context):
     """Main entry point."""
