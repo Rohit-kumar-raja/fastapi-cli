@@ -28,7 +28,7 @@ def create_folder_structure(base_dir: str):
     files = {
         f"{base_dir}/commands/__init__.py": "",
         f"{base_dir}/config.py": "# Configuration file",
-        f"{base_dir}/urls.py": "# all routes file\n"+get_urls_contant(),
+        f"{base_dir}/http/v1/urls.py": "# all routes file\n"+get_urls_contant(),
         f"{base_dir}/helpers/__init__.py": "",
         f"{base_dir}/helpers/utils.py": "# Utility functions \n\n"+get_helper_utilities_content(),
         f"{base_dir}/http/v1/controllers/__init__.py": "",

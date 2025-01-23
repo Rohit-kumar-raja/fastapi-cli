@@ -161,3 +161,32 @@ def create_routes(name: str, app_name: str, routes: str):
     Example: 'GET,POST,PUT'
     """
     # make_routes(name, app_name, routes)
+
+
+@app.command("runserver")
+def run_server(
+    mode: str = typer.Option(
+        "dev", 
+        help="Run mode: 'dev' for development or 'prod' for production",
+        case_sensitive=False
+    ),
+    host: str = typer.Option("127.0.0.1", help="The host to bind the server to"),
+    port: int = typer.Option(8000, help="The port to run the server on"),
+    workers: int = typer.Option(1, help="Number of worker processes for the server"),
+):
+    """
+    Run the FastAPI server in development ('dev') or production ('prod') mode with a specified number of workers.
+    """
+    import uvicorn
+
+    if mode.lower() not in ["dev", "prod"]:
+        typer.echo("Invalid mode. Use 'dev' for development or 'prod' for production.", err=True)
+        raise typer.Exit(code=1)
+
+    reload = mode.lower() == "dev"
+    environment = "Development" if reload else "Production"
+
+    typer.echo(f"Starting server in {environment} mode at http://{host}:{port} with {workers} workers...")
+    uvicorn.run("server:app", host=host, port=port, reload=reload, workers=workers)
+
+    

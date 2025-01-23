@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 import typer
-from ..content.startproject import get_api_contant, get_console_content, get_database_contant, get_helper_utilities_content, get_loging_contant, get_manage_contant, get_server_contant, get_urls_contant, get_welcome_controller_contant
+from ..content.startproject import get_api_contant, get_console_content, get_database_contant, get_gitignore_contant, get_helper_utilities_content, get_loging_contant, get_manage_contant, get_server_contant, get_urls_contant, get_welcome_controller_contant
 from .basic import app
 
 
@@ -10,6 +10,18 @@ def create_file(path: str, content: str = ""):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w") as file:
         file.write(content)
+
+
+def create_and_activate_env(project_path:str):
+    os.chdir(path=project_path)
+    os.system("python3 -m venv .venv")
+    os.system(". .venv/bin/activate")
+
+def install_required_package():
+    os.system("pip install fastapi")
+    os.system("pip install uvicorn")
+    os.system("pip install fpcli")
+
 
 def create_folder_structure(base_dir: str):
     """Creates the folder and file structure."""
@@ -33,7 +45,7 @@ def create_folder_structure(base_dir: str):
     files = {
         f"{base_dir}/app/commands/__init__.py": "",
         f"{base_dir}/app/config.py": "# Configuration file",
-        f"{base_dir}/app/urls.py": "# all routes file\n"+get_urls_contant(),
+        f"{base_dir}/app/http/v1/urls.py": "# all routes file\n"+get_urls_contant(),
         f"{base_dir}/app/helpers/__init__.py": "",
         f"{base_dir}/app/helpers/utils.py": "# Utility functions"+get_helper_utilities_content(),
         f"{base_dir}/app/http/v1/controllers/__init__.py": "",
@@ -62,6 +74,7 @@ def create_folder_structure(base_dir: str):
         f"{base_dir}/tests/__init__.py": "",
         f"{base_dir}/README.md": "# Project Readme",
         f"{base_dir}/Dockerfile": "# Dockerfile",
+        f"{base_dir}/.gitignore": get_gitignore_contant(),
         f"{base_dir}/docker-compose.yml": "# Docker Compose Configuration",
     }
 
@@ -79,5 +92,10 @@ def startproject(name: str):
     base_dir = Path(name).resolve()
     os.makedirs(base_dir, exist_ok=True)
     create_folder_structure(str(base_dir))
-    typer.echo(f"Project '{name}' created successfully at {base_dir}!")
+    create_and_activate_env(base_dir)
+    install_required_package()
+    typer.echo(typer.style(f"Project '{name}' created successfully at {base_dir}!",typer.colors.GREEN,bold=True))
+
+
+
 

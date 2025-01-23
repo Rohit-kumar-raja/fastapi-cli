@@ -89,7 +89,8 @@ if __name__ == "__main__":
 '''
 
 def get_loging_contant():
-    return'''import logging
+    return'''# Logging Configuration
+import logging
 import os
 from fastapi import Request
 from fastapi.responses import JSONResponse
@@ -156,22 +157,22 @@ async def log_errors(request:Request, call_next):
     except HTTPException as http_ex:
         # Log HTTP Exceptions separately
         error_logger.error(
-            f"HTTPException: {http_ex.detail}\n"
-            f"Path: {request.url.path}\n"
-            f"Method: {request.method}\n"
+            f"HTTPException: {http_ex.detail}"
+            f"Path: {request.url.path}"
+            f"Method: {request.method}"
             f"Headers: {dict(request.headers)}"
         )
         raise
     except Exception as ex:
         # Capture and log full stack trace for unhandled exceptions
         error_logger.error(
-            f"Unhandled Exception:\n"
-            f"Path: {request.url.path}\n"
-            f"Method: {request.method}\n"
-            f"Headers: {dict(request.headers)}\n"
-            f"Body: {await request.body()}\n"
-            f"Error: {str(ex)}\n"
-            f"Traceback:\n{traceback.format_exc()}"
+            f"Unhandled Exception:"
+            f"Path: {request.url.path}"
+            f"Method: {request.method}"
+            f"Headers: {dict(request.headers)}"
+            f"Body: {await request.body()}"
+            f"Error: {str(ex)}"
+            f"Traceback:{traceback.format_exc()}"
         )
         return JSONResponse(
             status_code=500,
@@ -181,6 +182,7 @@ async def log_errors(request:Request, call_next):
 
 def get_welcome_controller_contant():
     return ''' 
+#Welcome Controller   
 from fastapi import Request
 
 class WelcomeController:
@@ -192,7 +194,7 @@ class WelcomeController:
         Returns:
             str: A message indicating that all data is being fetched.
         """
-        return "Welcome to FastApi with Fpcli interface" '''
+        return {"message":"Welcome to FastApi with Fpcli interface" }'''
 
 def get_urls_contant():
     return '''from fastapi import APIRouter
@@ -201,7 +203,7 @@ from .controllers.welcome_controller import WelcomeController
 
 app_router = APIRouter()
 
-app_router.add_api_route("/welcome/", WelcomeController().index, methods=["GET"] )
+app_router.add_api_route("/", WelcomeController().index, methods=["GET"] )
  '''
 
 def get_api_contant():
@@ -210,7 +212,7 @@ from app.http.v1.urls import app_router
 
 router = APIRouter()
 
-router.include_router(router=app_router, prefix="/app") '''
+router.include_router(router=app_router) '''
 
 def get_console_content():
     return '''from fpcli import app
@@ -222,3 +224,38 @@ def test():
 def get_helper_utilities_content():
     return '''async def response(data, message: str, success: bool = True):
     return {"data": data, "message": message, "success": success}'''
+
+def get_gitignore_contant():
+    return'''__pycache__/
+uv.lock
+storage/logs
+mongodb_data
+.vscode
+.ruff_cache
+.env
+env
+venv
+.venv
+.env
+envs
+virtualenv
+python_env
+pyenv
+.virtualenv
+myenv
+project_env
+dev_env
+test_env
+local_env
+python3_env
+backend_env
+flask_env
+django_env
+fast_env
+web_env
+api_env
+sandbox_env
+tool_env
+lib_env
+dependencies_env
+'''
