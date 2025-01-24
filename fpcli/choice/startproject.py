@@ -2,9 +2,9 @@ import os
 import typer
 import subprocess
 
-from fpcli.function.startproject import create_file
+from ..function.startproject import  write_append_file
 
-from ..content.startproject import get_database_contant
+from ..content.startproject import get_database_contant, get_database_env_content
 
 class StartProjectChoice:
     database_choice:int=0
@@ -67,12 +67,9 @@ class StartProjectChoice:
             database_choice = typer.prompt("Enter the number of your choice", type=int)
 
             if 1 <= database_choice <= len(DATABASES) :
-                database_contant=get_database_contant() 
-
-                create_file(".env", database_contant[selected_db].lower())
-                create_file(".env.exmaple", database_contant[selected_db].lower())
+             
                 
-                selected_db = list(DATABASES.keys())[database_choice-1]
+                selected_db:str = list(DATABASES.keys())[database_choice-1]
 
 
                 if(StartProjectChoice.dependency_manager_choice==1):
@@ -80,7 +77,9 @@ class StartProjectChoice:
                 elif(StartProjectChoice.dependency_manager_choice==2):
                     DATABASES[selected_db].insert(0,"poetry")
             
-
+                database_contant=get_database_env_content() 
+                write_append_file(".env", database_contant[selected_db.lower()])
+                write_append_file(".env.example", database_contant[selected_db.lower()])
                 
                 DATABASES[selected_db].insert(1,"add")
                 subprocess.run(DATABASES[selected_db])
@@ -88,5 +87,19 @@ class StartProjectChoice:
             else:
                 typer.echo("Invalid choice. Please run the command again and choose a valid option.")
         
-
+    def add_alembic():
+        """
+        Ask the user explicitly if they want to add Alembic for database migrations.
+        Provides explicit 'yes' or 'no' options.
+        """
+        confirm = typer.prompt("Do you want to add Alembic for database migrations? (yes/no)", type=str, default="yes")
+        
+        if confirm.lower() in ["yes", "y"]:
+            subprocess.run(['pip','install','alembic'])
+            subprocess.run(['alembic','init','database/migrations'])
+        
+        elif confirm.lower() in ["no", "n"]:
+            typer.echo("Skipped: Alembic will not be added.")
+        else:
+            typer.echo("Invalid option. Please enter 'yes' or 'no'.")
 

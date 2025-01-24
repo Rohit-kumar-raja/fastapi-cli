@@ -271,20 +271,28 @@ APP_URL=http://localhost
 LOG_CHANNEL=stack
 LOG_LEVEL=debug'''
 
-def get_database_content():
-  return  {"mysql":'''# Database connection settings (Assuming you're using MySQL)
+def get_database_env_content():
+  return  {"mysql":'''
+           
+# Mysql Database connection settings 
 DB_CONNECTION=mysql
 DB_PORT=3306'''+comman_database_file_content(),
 
-'postgress': '''# Database connection settings (Assuming you're using MySQL)
+'postgresql': '''
+
+# Postgress Database connection settings 
 DB_CONNECTION=postgress
 DB_PORT=5432'''+comman_database_file_content(),
 
-'sqlite':'''# SQLite database settings
+'sqlite':'''
+
+# SQLite database settings
 DB_CONNECTION=sqlite
 DB_PATH=./sqlite_database.db''',
 
-'mongodb':'''# Database connection settings (Assuming you're using MySQL)
+'mongodb':'''
+
+# Mongodb Database connection settings 
 DB_CONNECTION=mongodb
 DB_PORT=27017'''+comman_database_file_content()
 

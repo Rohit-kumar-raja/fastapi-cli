@@ -84,6 +84,7 @@ def startproject(name: str):
     create_and_activate_env(base_dir)
     StartProjectChoice.dependency_management_choose()
     StartProjectChoice.choose_database()
+    StartProjectChoice.add_alembic()
     typer.echo(typer.style(f"Project '{name}' created successfully at {base_dir}!",typer.colors.GREEN,bold=True))
 
 
