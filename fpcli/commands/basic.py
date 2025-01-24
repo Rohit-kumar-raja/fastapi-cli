@@ -177,16 +177,19 @@ def run_server(
     """
     Run the FastAPI server in development ('dev') or production ('prod') mode with a specified number of workers.
     """
-    import uvicorn
+    try:
+        import uvicorn
 
-    if mode.lower() not in ["dev", "prod"]:
-        typer.echo("Invalid mode. Use 'dev' for development or 'prod' for production.", err=True)
-        raise typer.Exit(code=1)
+        if mode.lower() not in ["dev", "prod"]:
+            typer.echo("Invalid mode. Use 'dev' for development or 'prod' for production.", err=True)
+            raise typer.Exit(code=1)
 
-    reload = mode.lower() == "dev"
-    environment = "Development" if reload else "Production"
+        reload = mode.lower() == "dev"
+        environment = "Development" if reload else "Production"
 
-    typer.echo(f"Starting server in {environment} mode at http://{host}:{port} with {workers} workers...")
-    uvicorn.run("server:app", host=host, port=port, reload=reload, workers=workers)
+        typer.echo(f"Starting server in {environment} mode at http://{host}:{port} with {workers} workers...")
+        uvicorn.run("server:app", host=host, port=port, reload=reload, workers=workers)
+    except Exception as e  : 
+        run_server(mode=mode,host=host,port=port+1 , workers=workers)
 
     

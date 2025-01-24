@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 import typer
+
+from ..function.choice import choose_database, dependency_management
 from ..content.startproject import get_api_contant, get_console_content, get_database_contant, get_gitignore_contant, get_helper_utilities_content, get_loging_contant, get_manage_contant, get_server_contant, get_urls_contant, get_welcome_controller_contant
 from .basic import app
 
@@ -18,9 +20,9 @@ def create_and_activate_env(project_path:str):
     os.system(". .venv/bin/activate")
 
 def install_required_package():
-    os.system("pip install fastapi")
-    os.system("pip install uvicorn")
-    os.system("pip install fpcli")
+    os.system("pip install ")
+    os.system("uv add fastapi uvicorn fpcli alembic " )
+
 
 
 def create_folder_structure(base_dir: str):
@@ -73,6 +75,8 @@ def create_folder_structure(base_dir: str):
         f"{base_dir}/storage/logs/error.log": "",
         f"{base_dir}/tests/__init__.py": "",
         f"{base_dir}/README.md": "# Project Readme",
+        f"{base_dir}/.env": "# Project Envirment variable",
+        f"{base_dir}/.env.example": "# Project Envirment varialble",
         f"{base_dir}/Dockerfile": "# Dockerfile",
         f"{base_dir}/.gitignore": get_gitignore_contant(),
         f"{base_dir}/docker-compose.yml": "# Docker Compose Configuration",
@@ -89,12 +93,14 @@ def create_folder_structure(base_dir: str):
 @app.command("startproject")
 def startproject(name: str):
     """Create a new project structure."""
-    base_dir = Path(name).resolve()
-    os.makedirs(base_dir, exist_ok=True)
-    create_folder_structure(str(base_dir))
-    create_and_activate_env(base_dir)
-    install_required_package()
-    typer.echo(typer.style(f"Project '{name}' created successfully at {base_dir}!",typer.colors.GREEN,bold=True))
+    # choose_database()
+    dependency_management()
+    # base_dir = Path(name).resolve()
+    # os.makedirs(base_dir, exist_ok=True)
+    # create_folder_structure(str(base_dir))
+    # create_and_activate_env(base_dir)
+    # install_required_package()
+    # typer.echo(typer.style(f"Project '{name}' created successfully at {base_dir}!",typer.colors.GREEN,bold=True))
 
 
 
