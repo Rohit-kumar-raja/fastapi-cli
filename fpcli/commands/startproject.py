@@ -2,28 +2,11 @@ import os
 from pathlib import Path
 import typer
 
-from fpcli.choice.startproject import StartProjectChoice
+from ..choice.startproject import StartProjectChoice
+from ..function.startproject import create_and_activate_env, create_file
 
-from ..content.startproject import get_api_contant, get_console_content, get_database_contant, get_gitignore_contant, get_helper_utilities_content, get_loging_contant, get_manage_contant, get_server_contant, get_urls_contant, get_welcome_controller_contant
+from ..content.startproject import get_api_contant, get_console_content, get_database_contant, get_env_file_content, get_gitignore_contant, get_helper_utilities_content, get_loging_contant, get_manage_contant, get_server_contant, get_urls_contant, get_welcome_controller_contant
 from .basic import app
-
-
-def create_file(path: str, content: str = ""):
-    """Creates a file with the given content."""
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w") as file:
-        file.write(content)
-
-
-def create_and_activate_env(project_path:str):
-    os.chdir(path=project_path)
-    os.system("python3 -m venv .venv")
-    os.system(". .venv/bin/activate")
-
-def install_required_package():
-    os.system("pip install ")
-    os.system("uv add fastapi uvicorn fpcli alembic " )
-
 
 
 def create_folder_structure(base_dir: str):
@@ -76,8 +59,8 @@ def create_folder_structure(base_dir: str):
         f"{base_dir}/storage/logs/error.log": "",
         f"{base_dir}/tests/__init__.py": "",
         f"{base_dir}/README.md": "# Project Readme",
-        f"{base_dir}/.env": "# Project Envirment variable",
-        f"{base_dir}/.env.example": "# Project Envirment varialble",
+        f"{base_dir}/.env": "# Project Envirment variable"+get_env_file_content(),
+        f"{base_dir}/.env.example": "# Project Envirment varialble"+get_env_file_content(),
         f"{base_dir}/Dockerfile": "# Dockerfile",
         f"{base_dir}/.gitignore": get_gitignore_contant(),
         f"{base_dir}/docker-compose.yml": "# Docker Compose Configuration",
@@ -94,15 +77,14 @@ def create_folder_structure(base_dir: str):
 @app.command("startproject")
 def startproject(name: str):
     """Create a new project structure."""
+
+    base_dir = Path(name).resolve()
+    os.makedirs(base_dir, exist_ok=True)
+    create_folder_structure(str(base_dir))
+    create_and_activate_env(base_dir)
     StartProjectChoice.dependency_management_choose()
     StartProjectChoice.choose_database()
-    # dependency_management()
-    # base_dir = Path(name).resolve()
-    # os.makedirs(base_dir, exist_ok=True)
-    # create_folder_structure(str(base_dir))
-    # create_and_activate_env(base_dir)
-    # install_required_package()
-    # typer.echo(typer.style(f"Project '{name}' created successfully at {base_dir}!",typer.colors.GREEN,bold=True))
+    typer.echo(typer.style(f"Project '{name}' created successfully at {base_dir}!",typer.colors.GREEN,bold=True))
 
 
 

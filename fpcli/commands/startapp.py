@@ -1,15 +1,10 @@
 import os
 from pathlib import Path
 import typer
-from ..content.startproject import get_api_contant, get_console_content, get_database_contant, get_helper_utilities_content, get_loging_contant, get_manage_contant, get_server_contant, get_urls_contant, get_welcome_controller_contant
+
+from ..function.startproject import create_file
+from ..content.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
 from .basic import app
-
-
-def create_file(path: str, content: str = ""):
-    """Creates a file with the given content."""
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w") as file:
-        file.write(content)
 
 def create_folder_structure(base_dir: str):
     """Creates the folder and file structure."""

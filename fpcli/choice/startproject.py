@@ -1,5 +1,10 @@
+import os
 import typer
 import subprocess
+
+from fpcli.function.startproject import create_file
+
+from ..content.startproject import get_database_contant
 
 class StartProjectChoice:
     database_choice:int=0
@@ -62,7 +67,13 @@ class StartProjectChoice:
             database_choice = typer.prompt("Enter the number of your choice", type=int)
 
             if 1 <= database_choice <= len(DATABASES) :
+                database_contant=get_database_contant() 
+
+                create_file(".env", database_contant[selected_db].lower())
+                create_file(".env.exmaple", database_contant[selected_db].lower())
+                
                 selected_db = list(DATABASES.keys())[database_choice-1]
+
 
                 if(StartProjectChoice.dependency_manager_choice==1):
                     DATABASES[selected_db].insert(0,"uv")
@@ -77,4 +88,5 @@ class StartProjectChoice:
             else:
                 typer.echo("Invalid choice. Please run the command again and choose a valid option.")
         
+
 

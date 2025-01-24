@@ -259,3 +259,45 @@ tool_env
 lib_env
 dependencies_env
 '''
+
+def get_env_file_content():
+  return  '''# FastAPI settings
+APP_NAME=FastAPIApp
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost
+
+# Logging settings (You can configure logging in FastAPI as needed)
+LOG_CHANNEL=stack
+LOG_LEVEL=debug'''
+
+def get_database_content():
+  return  {"mysql":'''# Database connection settings (Assuming you're using MySQL)
+DB_CONNECTION=mysql
+DB_PORT=3306'''+comman_database_file_content(),
+
+'postgress': '''# Database connection settings (Assuming you're using MySQL)
+DB_CONNECTION=postgress
+DB_PORT=5432'''+comman_database_file_content(),
+
+'sqlite':'''# SQLite database settings
+DB_CONNECTION=sqlite
+DB_PATH=./sqlite_database.db''',
+
+'mongodb':'''# Database connection settings (Assuming you're using MySQL)
+DB_CONNECTION=mongodb
+DB_PORT=27017'''+comman_database_file_content()
+
+
+}
+    
+
+def comman_database_file_content():
+   return '''DB_HOST=127.0.0.1
+DB_DATABASE=fastapi_db
+DB_USERNAME=root
+DB_PASSWORD='''
+
+
+
+
