@@ -2,7 +2,8 @@ import os
 from pathlib import Path
 import typer
 
-from ..function.choice import choose_database, dependency_management
+from fpcli.choice.startproject import StartProjectChoice
+
 from ..content.startproject import get_api_contant, get_console_content, get_database_contant, get_gitignore_contant, get_helper_utilities_content, get_loging_contant, get_manage_contant, get_server_contant, get_urls_contant, get_welcome_controller_contant
 from .basic import app
 
@@ -93,8 +94,8 @@ def create_folder_structure(base_dir: str):
 @app.command("startproject")
 def startproject(name: str):
     """Create a new project structure."""
-    # choose_database()
-    dependency_management()
+    StartProjectChoice.choose_database()
+    # dependency_management()
     # base_dir = Path(name).resolve()
     # os.makedirs(base_dir, exist_ok=True)
     # create_folder_structure(str(base_dir))
