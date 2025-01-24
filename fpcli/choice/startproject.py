@@ -6,7 +6,7 @@ class StartProjectChoice:
     dependency_manager_choice:int=0
 
     @staticmethod
-    def dependency_management(self):
+    def dependency_management_choose():
         """
         Choose between uv, poetry, or None, and install the selected one.
         """
@@ -16,7 +16,7 @@ class StartProjectChoice:
         typer.echo("3. None (Do not install any manager)")
         
         dependency_manager_choice = typer.prompt("Enter the number of your choice", type=int)
-        self.dependency_manager_choice=dependency_manager_choice
+        StartProjectChoice.dependency_manager_choice=dependency_manager_choice
 
         if dependency_manager_choice == 1:
             typer.echo("You selected uv.")
@@ -46,7 +46,7 @@ class StartProjectChoice:
             raise typer.Exit()
 
     @staticmethod
-    def choose_database(self):
+    def choose_database():
         DATABASES = {
             "SQLite": ["sqlmodel"],
             "PostgreSQL": ["sqlmodel", "asyncpg", "databases"],
@@ -54,17 +54,27 @@ class StartProjectChoice:
             "MongoDB": ["motor"]
         }
 
-        typer.echo(typer.style("Please select a database from the list below:",typer.colors.WHITE,blink=True,bg=typer.colors.BLUE, bold=True))
-        for idx, db in enumerate(DATABASES, start=1):
-            typer.echo(typer.style(f"{idx}. {db}",bold=True))
-        
-        database_choice = typer.prompt("Enter the number of your choice", type=int)
+        if(StartProjectChoice.dependency_manager_choice!=3):
+            typer.echo(typer.style("Please select a database from the list below:",typer.colors.WHITE,blink=True,bg=typer.colors.BLUE, bold=True))
+            for idx, db in enumerate(DATABASES, start=1):
+                typer.echo(typer.style(f"{idx}. {db}",bold=True))
+            
+            database_choice = typer.prompt("Enter the number of your choice", type=int)
 
-        if 1 <= database_choice <= len(DATABASES):
-            selected_db = list(DATABASES.keys())[database_choice-1]
-            print(DATABASES[selected_db])
-            typer.echo(f"You have selected: {selected_db}")
-        else:
-            typer.echo("Invalid choice. Please run the command again and choose a valid option.")
-    
+            if 1 <= database_choice <= len(DATABASES) :
+                selected_db = list(DATABASES.keys())[database_choice-1]
+
+                if(StartProjectChoice.dependency_manager_choice==1):
+                    DATABASES[selected_db].insert(0,"uv")
+                elif(StartProjectChoice.dependency_manager_choice==2):
+                    DATABASES[selected_db].insert(0,"poetry")
+            
+
+                
+                DATABASES[selected_db].insert(1,"add")
+                subprocess.run(DATABASES[selected_db])
+                typer.echo(f"You have selected: {selected_db}")
+            else:
+                typer.echo("Invalid choice. Please run the command again and choose a valid option.")
+        
 

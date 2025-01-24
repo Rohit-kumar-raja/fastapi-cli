@@ -94,6 +94,7 @@ def create_folder_structure(base_dir: str):
 @app.command("startproject")
 def startproject(name: str):
     """Create a new project structure."""
+    StartProjectChoice.dependency_management_choose()
     StartProjectChoice.choose_database()
     # dependency_management()
     # base_dir = Path(name).resolve()
