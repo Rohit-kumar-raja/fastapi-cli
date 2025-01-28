@@ -301,10 +301,121 @@ DB_PORT=27017'''+comman_database_file_content()
     
 
 def comman_database_file_content():
-   return '''DB_HOST=127.0.0.1
+   return '''
+DB_HOST=127.0.0.1
 DB_DATABASE=fastapi_db
 DB_USERNAME=root
 DB_PASSWORD='''
+
+
+
+
+
+def get_confing_setting_top_content():
+    return '''# Database Configuration
+from pydantic import Field
+from typing import Optional
+from pydantic_settings import BaseSettings
+
+""" The purpose for this file to for getting the data from .env file   """
+
+class AppSettings(BaseSettings):
+     # FastAPI application settings
+    app_name: str = Field("FastAPIApp", env="APP_NAME")
+    app_env: str = Field("local", env="APP_ENV")
+    app_debug: bool = Field(True, env="APP_DEBUG")
+    app_url: str = Field("http://localhost", env="APP_URL")
+    
+    # Logging settings
+    log_channel: str = Field("stack", env="LOG_CHANNEL")
+    log_level: str = Field("debug", env="LOG_LEVEL")
+    '''
+
+def get_confing_setting_bottom_content():
+    return '''   
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+
+# Load settings
+settings = AppSettings()'''
+
+
+
+
+def get_config_setting_content():
+    return {
+        'mysql': get_confing_setting_top_content() +  '''
+    # MySQL Configuration
+    mysql_url: Optional[str] = Field(None, env="DATABASE_URL")
+    mysql_host: str = Field("127.0.0.1", env="DB_HOST")
+    mysql_port: int = Field(3306, env="DB_PORT")
+    mysql_database: str = Field("forge", env="DB_DATABASE")
+    mysql_username: str = Field("forge", env="DB_USERNAME")
+    mysql_password: str = Field("", env="DB_PASSWORD")
+    mysql_charset: str = "utf8mb4"
+    mysql_collation: str = "utf8mb4_unicode_ci"
+    mysql_ssl_ca: Optional[str] = Field(None, env="MYSQL_ATTR_SSL_CA")
+        ''' +get_confing_setting_bottom_content(),  # Ensure it's not None
+
+        'postgresql': get_confing_setting_top_content() + '''
+    # PostgreSQL Configuration
+    pgsql_url: Optional[str] = Field(None, env="DATABASE_URL")
+    pgsql_host: str = Field("127.0.0.1", env="DB_HOST")
+    pgsql_port: int = Field(5432, env="DB_PORT")
+    pgsql_database: str = Field("forge", env="DB_DATABASE")
+    pgsql_username: str = Field("forge", env="DB_USERNAME")
+    pgsql_password: str = Field("", env="DB_PASSWORD")
+    pgsql_charset: str = "utf8"
+    pgsql_sslmode: str = Field("prefer", env="DB_SSLMODE")''' + get_confing_setting_bottom_content() ,
+
+        'sqlite': get_confing_setting_top_content() + '''
+    # SQLite Configuration
+    sqlite_url: Optional[str] = Field(None, env="DATABASE_URL")
+    sqlite_database: str = Field("./database.sqlite", env="DB_DATABASE")
+    sqlite_foreign_keys: bool = Field(True, env="DB_FOREIGN_KEYS")''' + get_confing_setting_bottom_content(),
+
+        'mongodb': get_confing_setting_top_content() + '''
+    mongodb_url: Optional[str] = Field(None, env="MONGODB_URL")  # Full connection string
+    mongodb_host: str = Field("127.0.0.1", env="MONGODB_HOST")
+    mongodb_port: int = Field(27017, env="MONGODB_PORT")
+    mongodb_database: str = Field("forge", env="MONGODB_DATABASE")
+    mongodb_username: Optional[str] = Field(None, env="MONGODB_USERNAME")
+    mongodb_password: Optional[str] = Field(None, env="MONGODB_PASSWORD")
+    mongodb_auth_source: str = Field("admin", env="MONGODB_AUTH_SOURCE")  # Default is 'admin' ''' + get_confing_setting_bottom_content()
+    }
+
+
+# def get_connection_config():
+#     return  {'sqlite':'''
+# from sqlmodel import  create_engine
+# from pydantic_settings import BaseSettings
+# from settings import settings 
+
+# class Database(BaseSettings):
+#     DATABASE_URL: str = DATABASE_URL=f"sqlite:///./{settings.sqlite_database}"  # SQLite connection string
+    
+
+#     def get_connection(self):
+#         # Create the engine
+#         return create_engine(self.DATABASE_URL)
+# ''',
+# 'mysql':'''from sqlmodel import  create_engine
+# from settings import settings 
+
+# class Database:
+#     DATABASE_URL: str = f"mysql+mysqlclient://{settings.mysql_username}:{settings.mysql_password}@{settings.mysql_host}:{settings.mysql_port}/{settings.mysql_database}"  # MySQL connection string
+      
+#     def get_connection(self):
+#         # Create the engine
+#         database = Database(settings.DATABASE_URL)
+#         return create_engine(self.DATABASE_URL)'''
+
+# 'postgresql':
+# ''''''
+
+# }
+
 
 
 

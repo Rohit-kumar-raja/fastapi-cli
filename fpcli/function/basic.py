@@ -126,3 +126,5 @@ def make_routes(name: str, app_name: str, routes: list):
 
     typer.echo(f"Routes for '{controller_name}' created successfully in '{file_path}'!")
   
+
+

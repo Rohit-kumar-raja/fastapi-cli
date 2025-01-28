@@ -4,7 +4,7 @@ import subprocess
 
 from ..function.startproject import  write_append_file
 
-from ..content.startproject import get_database_contant, get_database_env_content
+from ..content.startproject import get_config_setting_content, get_database_contant, get_database_env_content
 
 class StartProjectChoice:
     database_choice:int=0
@@ -53,9 +53,9 @@ class StartProjectChoice:
     @staticmethod
     def choose_database():
         DATABASES = {
-            "SQLite": ["sqlmodel"],
-            "PostgreSQL": ["sqlmodel", "asyncpg", "databases"],
-            "MySQL": ["sqlmodel", "mysqlclient", "databases"],
+            "SQLite": ["sqlmodel","pydantic_settings"],
+            "PostgreSQL": ["sqlmodel", "asyncpg", "databases","pydantic_settings"],
+            "MySQL": ["sqlmodel", "mysqlclient", "databases","pydantic_settings"],
             "MongoDB": ["motor"]
         }
 
@@ -73,13 +73,16 @@ class StartProjectChoice:
 
 
                 if(StartProjectChoice.dependency_manager_choice==1):
-                    DATABASES[selected_db].insert(0,"uv")
+                    DATABASES[selected_db].insert(0,"uv") # this menas installing the package for the uv
                 elif(StartProjectChoice.dependency_manager_choice==2):
-                    DATABASES[selected_db].insert(0,"poetry")
+                    DATABASES[selected_db].insert(0,"poetry") # Thsi means installing the package for the poetry
             
                 database_contant=get_database_env_content() 
+                setting_config_contant=get_config_setting_content() 
+                print(setting_config_contant)
                 write_append_file(".env", database_contant[selected_db.lower()])
                 write_append_file(".env.example", database_contant[selected_db.lower()])
+                write_append_file("config/settings.py",setting_config_contant[selected_db.lower()])
                 
                 DATABASES[selected_db].insert(1,"add")
                 subprocess.run(DATABASES[selected_db])

@@ -46,8 +46,6 @@ def create_folder_structure(base_dir: str):
         f"{base_dir}/config/logging.py": "# Logging Configuration\n"+get_loging_contant(),
         f"{base_dir}/config/settings.py": "# Settings Configuration",
         f"{base_dir}/database/__init__.py": "",
-        f"{base_dir}/database/migrations/__init__.py": "",
-        f"{base_dir}/database/migrations/migration_file.py": "# Migration File",
         f"{base_dir}/database/run_seeders.py": "# Run Seeders",
         f"{base_dir}/database/seeders/__init__.py": "",
         f"{base_dir}/routes/api.py": "# API Routes\n"+get_api_contant(),
