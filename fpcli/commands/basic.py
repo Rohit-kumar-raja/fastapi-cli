@@ -11,10 +11,10 @@ app= typer.Typer()
 
 @app.command("make:controller")
 def controller(name: str, app_name: str , 
-               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style("Validator",typer.colors.YELLOW,bold=True) }   "),
-               s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style("Service",typer.colors.GREEN,bold=True) } "),
-               m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean Model { typer.style("Model",typer.colors.BRIGHT_RED,bold=True) } "),
-               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style("Resource",typer.colors.BRIGHT_BLUE,bold=True) } ")):
+               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style('Validator',typer.colors.YELLOW,bold=True) }   "),
+               s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.GREEN,bold=True) } "),
+               m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean Model { typer.style('Model',typer.colors.BRIGHT_RED,bold=True) } "),
+               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } ")):
     
     """
     Generate a FastAPI controller file with a user-defined name inside a specific app.
@@ -34,10 +34,10 @@ def controller(name: str, app_name: str ,
 
 @app.command("make:model")
 def model(name: str, app_name: str , 
-               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style("Validator",typer.colors.YELLOW,bold=True) }   "),
-               s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style("Service",typer.colors.GREEN,bold=True) } "),
-               c: bool=typer.Option(False,help=f"for Creating the Controller you can pass C. C means  { typer.style("Controller",typer.colors.YELLOW,bold=True) } "),
-               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style("Resource",typer.colors.BRIGHT_BLUE,bold=True) } ")):
+               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style('Validator',typer.colors.YELLOW,bold=True) }   "),
+               s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.GREEN,bold=True) } "),
+               c: bool=typer.Option(False,help=f"for Creating the Controller you can pass C. C means  { typer.style('Controller',typer.colors.YELLOW,bold=True) } "),
+               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } ")):
     """
     Generate a Beanie ODM model file with a user-defined name inside a specific app.
     """
@@ -56,10 +56,10 @@ def model(name: str, app_name: str ,
 
 @app.command("make:validator")
 def validator(name: str, app_name: str , 
-               c: bool=typer.Option(False,help=f"for Creating the Controller you can pass C. C means { typer.style("Controller",typer.colors.BRIGHT_YELLOW,bold=True) } "),
-               s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style("Service",typer.colors.YELLOW,bold=True) } "),
-               m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean Model { typer.style("Service",typer.colors.BRIGHT_RED,bold=True) } "),
-               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style("Resource",typer.colors.BRIGHT_RED,bold=True) } ")):
+               c: bool=typer.Option(False,help=f"for Creating the Controller you can pass C. C means { typer.style('Controller',typer.colors.BRIGHT_YELLOW,bold=True) } "),
+               s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.YELLOW,bold=True) } "),
+               m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean Model { typer.style('Service',typer.colors.BRIGHT_RED,bold=True) } "),
+               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_RED,bold=True) } ")):
     """
     Generate a Pydantic validator file with a user-defined name inside a specific app.
     """
@@ -75,10 +75,10 @@ def validator(name: str, app_name: str ,
 
 @app.command("make:service")
 def service(name: str, app_name: str , 
-               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style("Validator",typer.colors.YELLOW,bold=True) }   "),
-               m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean  { typer.style("Model",typer.colors.GREEN,bold=True) } "),
-               c: bool=typer.Option(False,help=f"for Creating the Controller you can pass C. C means  { typer.style("Controller",typer.colors.YELLOW,bold=True) } "),
-               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style("Resource",typer.colors.BRIGHT_BLUE,bold=True) } ")):
+               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style('Validator',typer.colors.YELLOW,bold=True) }   "),
+               m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean  { typer.style('Model',typer.colors.GREEN,bold=True) } "),
+               c: bool=typer.Option(False,help=f"for Creating the Controller you can pass C. C means  { typer.style('Controller',typer.colors.YELLOW,bold=True) } "),
+               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } ")):
     """
     Generate a service class file with a user-defined name inside a specific app.
     """
