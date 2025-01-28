@@ -8,6 +8,7 @@ def create_file(path: str, content: str = ""):
 
 
 def create_and_activate_env(project_path:str):
+    print(project_path)
     os.chdir(path=project_path)
     os.system("python3 -m venv .venv")
     os.system(". .venv/bin/activate")

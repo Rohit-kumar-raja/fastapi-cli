@@ -27,7 +27,11 @@ class StartProjectChoice:
             typer.echo("You selected uv.")
             try:
                 typer.echo("Installing uv...")
-                subprocess.run(["pip", "install", "uv"], check=True)
+                try:
+                    subprocess.run(["pip", "install", "uv"], check=True)
+                except:
+                    subprocess.run(["pipx", "install", "uv"], check=True)
+
                 subprocess.run(['uv','init'])
                 subprocess.run(['uv','add', 'fastapi', 'uvicorn', 'fpcli'])
                 typer.echo("uv installed successfully.")
@@ -37,7 +41,11 @@ class StartProjectChoice:
             typer.echo("You selected poetry.")
             try:
                 typer.echo("Installing poetry...")
-                subprocess.run(["pip", "install", "poetry"], check=True)
+                try:
+                    subprocess.run(["pip", "install", "poetry"], check=True)
+                except:
+                    subprocess.run(["pipx", "install", "poetry"], check=True)
+
                 subprocess.run(['poetry','init'])
                 subprocess.run(['poetry','add', 'fastapi', 'uvicorn', 'fpcli'])
 
