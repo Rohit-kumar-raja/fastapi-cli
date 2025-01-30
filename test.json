@@ -1,0 +1,24 @@
+{
+    "alembic_version": {
+        "columns": [
+            "version_num"
+        ],
+        "data": [
+            [
+                "71aeb9ce9f2e"
+            ]
+        ]
+    },
+    "studentmodel": {
+        "columns": [
+            "status",
+            "age",
+            "id",
+            "deleted_at",
+            "created_at",
+            "name",
+            "updated_at"
+        ],
+        "data": []
+    }
+}
