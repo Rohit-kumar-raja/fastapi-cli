@@ -1,7 +1,5 @@
 import os
 import json
-from sqlite3 import Row
-from sqlalchemy import true
 import typer
 from .basic import app
 from ..connection import get_postgresql_connection
