@@ -13,20 +13,19 @@ def create_folder_structure(base_dir: str):
     folders = [
         "utils",
         "views",
+        "test",
         "schemas",
-        "middleware",
         "models",
         "services",
       
     ]
 
     files = {
-        f"{base_dir}/config.py": "# Configuration file",
         f"{base_dir}/urls.py": "# all routes file\n"+get_urls_contant(),
         f"{base_dir}/utils/__init__.py": "# Utility functions \n\n"+get_helper_utilities_content(),
         f"{base_dir}/views/welcome_views.py": "#Welcome Controller  "+get_welcome_controller_contant(),
-        f"{base_dir}/middleware/__init__.py": "",
         f"{base_dir}/models/__init__.py": "",
+        f"{base_dir}/test/__init__.py": "",
         f"{base_dir}/services/__init__.py": "",
 
     }
@@ -41,7 +40,7 @@ def create_folder_structure(base_dir: str):
     
 @make.command("app")
 def startapp(name: str):
-    """Create a new project structure."""
+    """Create a new app structure."""
     base_dir = Path(name).resolve()
     os.makedirs(base_dir, exist_ok=True)
     create_folder_structure(str(base_dir))
