@@ -185,7 +185,7 @@ def get_welcome_controller_contant():
 #Welcome Controller   
 from fastapi import Request
 
-class WelcomeController:
+class WelcomeViews:
 
     async def index(self):
         """
@@ -198,12 +198,10 @@ class WelcomeController:
 
 def get_urls_contant():
     return '''from fastapi import APIRouter
-from .controllers.welcome_controller import WelcomeController
-
 
 app_router = APIRouter()
 
-app_router.add_api_route("/", WelcomeController().index, methods=["GET"] )
+#app_router.add_api_route("/", WelcomeViews().index, methods=["GET"] )
  '''
 
 def get_api_contant():

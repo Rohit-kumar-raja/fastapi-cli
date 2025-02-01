@@ -4,22 +4,30 @@ import typer
 
 from ..function.startproject import create_file
 from ..content.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
-from .basic import app
+from .make import make
+from .make import app
+
 
 def create_folder_structure(base_dir: str):
     """Creates the folder and file structure."""
     folders = [
-        "migrations",      
+        "utils",
+        "views",
+        "schemas",
+        "middleware",
+        "models",
+        "services",
+      
     ]
 
     files = {
         f"{base_dir}/config.py": "# Configuration file",
         f"{base_dir}/urls.py": "# all routes file\n"+get_urls_contant(),
-        f"{base_dir}/utils.py": "# Utility functions \n\n"+get_helper_utilities_content(),
-        f"{base_dir}/views.py": "#Welcome View  ",
-        f"{base_dir}/schemas.py": "",
-        f"{base_dir}/middleware.py": "",
-        f"{base_dir}/models.py": "",
+        f"{base_dir}/utils/__init__.py": "# Utility functions \n\n"+get_helper_utilities_content(),
+        f"{base_dir}/views/welcome_views.py": "#Welcome Controller  "+get_welcome_controller_contant(),
+        f"{base_dir}/middleware/__init__.py": "",
+        f"{base_dir}/models/__init__.py": "",
+        f"{base_dir}/services/__init__.py": "",
 
     }
 
@@ -31,7 +39,7 @@ def create_folder_structure(base_dir: str):
     for file, content in files.items():
         create_file(file, content)
     
-@app.command("startapp")
+@make.command("app")
 def startapp(name: str):
     """Create a new project structure."""
     base_dir = Path(name).resolve()
