@@ -3,31 +3,31 @@ from ..content.cli_content import *
 from ..function.check_class import check_class
 from ..function.check_app import check_app
 
-def make_controller(name: str, app_name: str ):
+def make_views(name: str, app_name: str ):
  
     # Directory paths
     app_dir = check_app(app_name=app_name)
-    controllers_dir = app_dir / "http/v1/controllers"
+    controllers_dir = app_dir / "views"
 
     # Verify if the app exists
 
     # Capitalize the controller name and generate file name
-    class_name = f"{name.capitalize()}Controller"
-    file_name = f"{name.lower()}_controller.py"
+    class_name = f"{name.capitalize()}View"
+    file_name = f"{name.lower()}_view.py"
     file_path = controllers_dir / file_name
 
     # Check if the controller file already exists
     check_class(file_path=file_path, app_name=app_name, class_name=class_name)
 
     # Controller boilerplate content
-    content = get_controller_content(name=name)
+    content = get_views_content(name=name)
 
     # Ensure the controllers directory exists
     controllers_dir.mkdir(parents=True, exist_ok=True)
 
     # Write the controller file
     file_path.write_text(content)
-    typer.echo(f"Controller '{class_name}' created successfully in '{file_path}'!")
+    typer.echo(f"View '{class_name}' created successfully in '{file_path}'!")
 
 
 def make_model(name: str, app_name: str):
@@ -52,14 +52,14 @@ def make_model(name: str, app_name: str):
     file_path.write_text(content)
     typer.echo(f"Model '{class_name}' created successfully in '{file_path}'!")
 
-def make_validator(name: str, app_name: str):
+def make_schema(name: str, app_name: str):
     # Directory paths
     app_dir = check_app(app_name=app_name)
-    validators_dir = app_dir / "http/v1/validators"
+    validators_dir = app_dir / "schemas"
 
     # Capitalize the validator name and generate file name
-    class_name = f"{name.capitalize()}Validator"
-    file_name = f"{name.lower()}_validator.py"
+    class_name = f"{name.capitalize()}Schema"
+    file_name = f"{name.lower()}_schema.py"
     file_path = validators_dir / file_name
 
     # Check if the validator file already exists
@@ -72,7 +72,7 @@ def make_validator(name: str, app_name: str):
 
     # Write the validator file
     file_path.write_text(content)
-    typer.echo(f"Validator '{class_name}' created successfully in '{file_path}'!")
+    typer.echo(f"Schema '{class_name}' created successfully in '{file_path}'!")
 
 def make_service(name: str, app_name: str):
    

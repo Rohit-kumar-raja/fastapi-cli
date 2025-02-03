@@ -2,17 +2,16 @@ import typer
 from ..content.cli_content import *
 from ..function.check_class import check_class
 from ..function.check_app import check_app
-from ..function.basic import make_controller, make_model, make_routes, make_service, make_validator
+from ..function.basic import make_model, make_routes, make_schema, make_service,  make_views
 from .basic import app
 
 make=typer.Typer()
 
-app.add_typer(make,name="make")
 
 
-@make.command("controller")
-def controller(name: str, app_name: str , 
-               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style('Validator',typer.colors.YELLOW,bold=True) }   "),
+@make.command("view")
+def view(name: str, app_name: str , 
+               sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
                s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.GREEN,bold=True) } "),
                m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean Model { typer.style('Model',typer.colors.BRIGHT_RED,bold=True) } "),
                r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } ")):
@@ -23,50 +22,50 @@ def controller(name: str, app_name: str ,
     if(m):
         print(m,s,r)
 
-    make_controller(name=name,app_name=app_name)
+    make_views(name=name,app_name=app_name)
     if(m):
         make_model(name=name,app_name=app_name)
     if(s):
         make_service(name=name,app_name=app_name)
-    if(v):
-        make_validator(name=name,app_name=app_name)
+    if(sc):
+        make_schema(name=name,app_name=app_name)
     if(r):
         make_routes(name=name,app_name=app_name)
 
 @make.command("model")
 def model(name: str, app_name: str , 
-               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style('Validator',typer.colors.YELLOW,bold=True) }   "),
+               sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
                s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.GREEN,bold=True) } "),
-               c: bool=typer.Option(False,help=f"for Creating the Controller you can pass C. C means  { typer.style('Controller',typer.colors.YELLOW,bold=True) } "),
+               v: bool=typer.Option(False,help=f"for Creating the View you can pass V. V means  { typer.style('View',typer.colors.YELLOW,bold=True) } "),
                r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } ")):
     """
     Generate a Beanie ODM model file with a user-defined name inside a specific app.
     """
     
     make_model(name=name,app_name=app_name)
-    if(c):
-        make_controller(name=name,app_name=app_name)
+    if(v):
+        make_views(name=name,app_name=app_name)
     if(s):
         make_service(name=name,app_name=app_name)
-    if(v):
-        make_validator(name=name,app_name=app_name)
+    if(sc):
+        make_schema(name=name,app_name=app_name)
     if(r):
         make_routes(name=name,app_name=app_name)
 
 
 
-@make.command("validator")
-def validator(name: str, app_name: str , 
-               c: bool=typer.Option(False,help=f"for Creating the Controller you can pass C. C means { typer.style('Controller',typer.colors.BRIGHT_YELLOW,bold=True) } "),
+@make.command("schema")
+def schema(name: str, app_name: str , 
+               v: bool=typer.Option(False,help=f"for Creating the Views you can pass v. v means { typer.style('View',typer.colors.BRIGHT_YELLOW,bold=True) } "),
                s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.YELLOW,bold=True) } "),
                m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean Model { typer.style('Service',typer.colors.BRIGHT_RED,bold=True) } "),
-               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_RED,bold=True) } ")):
+               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass r. r mean  { typer.style('Resource',typer.colors.BRIGHT_RED,bold=True) } ")):
     """
     Generate a Pydantic validator file with a user-defined name inside a specific app.
     """
-    make_validator(name=name,app_name=app_name)
-    if(c):
-        make_controller(name=name,app_name=app_name)
+    make_schema(name=name,app_name=app_name)
+    if(v):
+        make_views(name=name,app_name=app_name)
     if(s):
         make_service(name=name,app_name=app_name)
     if(m):
@@ -78,18 +77,18 @@ def validator(name: str, app_name: str ,
 def service(name: str, app_name: str , 
                v: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style('Validator',typer.colors.YELLOW,bold=True) }   "),
                m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean  { typer.style('Model',typer.colors.GREEN,bold=True) } "),
-               c: bool=typer.Option(False,help=f"for Creating the Controller you can pass C. C means  { typer.style('Controller',typer.colors.YELLOW,bold=True) } "),
+               sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
                r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } ")):
     """
     Generate a service class file with a user-defined name inside a specific app.
     """
     make_service(name=name,app_name=app_name)
-    if(c):
-        make_controller(name=name,app_name=app_name)
+    if(v):
+        make_views(name=name,app_name=app_name)
     if(m):
         make_model(name=name,app_name=app_name)
-    if(v):
-        make_validator(name=name,app_name=app_name)
+    if(sc):
+        make_schema(name=name,app_name=app_name)
     if(r):
         make_routes(name=name,app_name=app_name)
 

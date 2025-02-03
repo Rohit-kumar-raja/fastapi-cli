@@ -3,7 +3,7 @@ from pathlib import Path
 import typer
 
 from ..function.startproject import create_file
-from ..content.startproject import   get_helper_utilities_content,  get_urls_contant
+from ..content.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
 from .basic import app
 
 def create_folder_structure(base_dir: str):
@@ -16,7 +16,7 @@ def create_folder_structure(base_dir: str):
         f"{base_dir}/__init__.py": "# Configuration file",
         f"{base_dir}/urls.py": "# all routes file\n"+get_urls_contant(),
         f"{base_dir}/utils.py": "# Utility functions \n\n"+get_helper_utilities_content(),
-        f"{base_dir}/views.py": "#Welcome View  ",
+        f"{base_dir}/views.py": "#Welcome View  "+get_welcome_controller_contant(),
         f"{base_dir}/schemas.py": "",
         f"{base_dir}/test.py": "",
         f"{base_dir}/models.py": "",

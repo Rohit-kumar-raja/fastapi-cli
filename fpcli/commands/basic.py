@@ -2,10 +2,6 @@
 from pathlib import Path
 import typer
 from ..content.cli_content import *
-from ..function.check_class import check_class
-from ..function.check_app import check_app
-from ..function.basic import make_controller, make_model, make_routes, make_service, make_validator
-
 app= typer.Typer()
 
 import socket

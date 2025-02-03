@@ -1,4 +1,4 @@
-def get_controller_content(name: str):
+def get_views_content(name: str):
     class_name = f"{name.capitalize()}Controller"
     return f'''
 from fastapi import Request
