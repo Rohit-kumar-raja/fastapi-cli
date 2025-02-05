@@ -1,2 +1,2 @@
-app_folder="apps"
+app_folder="apps/"
 config_folder="project"

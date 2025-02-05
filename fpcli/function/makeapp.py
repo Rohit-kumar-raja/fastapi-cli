@@ -2,10 +2,11 @@ import os
 from pathlib import Path
 import typer
 
-from ..function.startproject import create_file
+from .startproject import create_file
 from ..content.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
+from ..fpcli_settings import app_folder
 
-def create_folder_structure(base_dir: str):
+def makeapp_with_folder(base_dir: str):
     """Creates the folder and file structure."""
     folders = [
         "utils",
@@ -35,10 +36,5 @@ def create_folder_structure(base_dir: str):
     for file, content in files.items():
         create_file(file, content)
     
-def makeapp_with_folder(name: str):
-    """Create a new app structure."""
-    base_dir = Path(name).resolve()
-    os.makedirs(base_dir, exist_ok=True)
-    create_folder_structure(str(base_dir))
-    typer.echo(f"Project '{name}' created successfully at {base_dir}!")
+   
 

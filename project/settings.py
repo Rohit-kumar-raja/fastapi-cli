@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     SMTP_SERVER: str = Field(..., description="SMTP server")
     SMTP_PORT: int = Field(..., description="SMTP port")
     SENDER_EMAIL: str = Field(..., description="Sender email")
+    SMTP_USERNAME: str = Field(..., description="Smtp server username")
     SMTP_PASSWORD: str = Field(..., description="SMTP password")
 
     # PGAdmin settings

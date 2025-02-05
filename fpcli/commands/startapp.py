@@ -5,13 +5,13 @@ import typer
 
 from ..function.startproject import create_file
 from ..content.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
-from .makeapp import makeapp_with_folder
+from ..function.makeapp import makeapp_with_folder
 from .basic import app
+from ..fpcli_settings import app_folder
 
 def create_folder_structure(base_dir: str):
     """Creates the folder and file structure."""
     folders = [
-          
     ]
 
     files = {
@@ -36,11 +36,10 @@ def create_folder_structure(base_dir: str):
 @app.command("startapp")
 def startapp(name: str, f:bool=typer.Option(False, help="if you passs the --f then you will get the structure into with folder")):
     """Create a new APP Structure. --f to Create APP with Folder structure"""
+    base_dir = Path(f"{app_folder}/{name}").resolve()
     if f:
-        makeapp_with_folder(name=name)
+        makeapp_with_folder(base_dir)
     else:
-        base_dir = Path(name).resolve()
-        os.makedirs(base_dir, exist_ok=True)
         create_folder_structure(str(base_dir))
         typer.echo(f"App '{name}' created successfully at {base_dir}!")
 
