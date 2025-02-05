@@ -1,8 +1,7 @@
 import os
 from pathlib import Path
-from click import Option, option
 import typer
-
+from fpcli.function.check_app import is_exits
 from ..function.startproject import create_file
 from ..content.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
 from ..function.makeapp import makeapp_with_folder
@@ -22,7 +21,6 @@ def create_folder_structure(base_dir: str):
         f"{base_dir}/schemas.py": "",
         f"{base_dir}/test.py": "",
         f"{base_dir}/models.py": "",
-
     }
 
     # Create folders
@@ -34,12 +32,14 @@ def create_folder_structure(base_dir: str):
         create_file(file, content)
     
 @app.command("startapp")
-def startapp(name: str, f:bool=typer.Option(False, help="if you passs the --f then you will get the structure into with folder")):
+def startapp(app_name: str, nofolder: bool = typer.Option(False, help="Pass --nofolder to create a simple file-based app")):
     """Create a new APP Structure. --f to Create APP with Folder structure"""
-    base_dir = Path(f"{app_folder}/{name}").resolve()
-    if f:
-        makeapp_with_folder(base_dir)
-    else:
+    is_exits(app_name=app_name)
+    base_dir = Path(f"{app_folder}/{app_name}").resolve()
+    if nofolder:
         create_folder_structure(str(base_dir))
-        typer.echo(f"App '{name}' created successfully at {base_dir}!")
+    else:
+        makeapp_with_folder(base_dir)
+
+    typer.echo(f"🎉 App '{app_name}' created successfully at {base_dir}!")
 

@@ -22,10 +22,9 @@ def makeapp_with_folder(base_dir: str):
         f"{base_dir}/urls.py": "# all routes file\n"+get_urls_contant(),
         f"{base_dir}/utils/__init__.py": "# Utility functions \n\n"+get_helper_utilities_content(),
         f"{base_dir}/views/welcome_views.py": "#Welcome Controller  "+get_welcome_controller_contant(),
-        f"{base_dir}/models/__init__.py": "",
-        f"{base_dir}/test/__init__.py": "",
-        f"{base_dir}/services/__init__.py": "",
-
+        f"{base_dir}/models/__init__.py": "#Register all the model here Example below \n\n#from .user_model import UserModel",
+        f"{base_dir}/test/__init__.py": "#Register all the test cases here Example below \n\n#from .user_test import UserTest",
+        f"{base_dir}/__init__.py": "# Configuration file",
     }
 
     # Create folders

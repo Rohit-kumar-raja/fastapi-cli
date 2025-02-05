@@ -2,10 +2,13 @@
 from pathlib import Path
 import typer
 from ..content.cli_content import *
-app= typer.Typer()
-
+from ..fpcli_settings import config_folder
 import socket
 import typer
+
+
+app= typer.Typer()
+
 
 @app.command("runserver")
 def run_server(
@@ -50,8 +53,8 @@ def run_server(
         port = find_available_port(host, port)
 
         typer.echo(f"Starting server in {environment} mode at http://{host}:{port} with {workers} workers...")
-        uvicorn.run("core.main:app", host=host, port=port, reload=reload, workers=workers)
-        print("Server started.")
+        uvicorn.run(f"{config_folder}.main:app", host=host, port=port, reload=reload, workers=workers)
+        print(f"🎉 Server started. at http://{host}:{port}")
 
     except Exception as e:
         typer.echo(f"Error: {e}", err=True)
