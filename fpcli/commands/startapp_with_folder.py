@@ -38,8 +38,7 @@ def create_folder_structure(base_dir: str):
     for file, content in files.items():
         create_file(file, content)
     
-@make.command("app")
-def startapp(name: str):
+def startapp_with_folder_structure(name: str):
     """Create a new app structure."""
     base_dir = Path(name).resolve()
     os.makedirs(base_dir, exist_ok=True)
