@@ -4,7 +4,7 @@ from .commands import *  # Ensure make is a Typer() instance in commands.py
 # app = typer.Typer()  # Initialize main Typer app
 
 # Add grouped commands
-app.add_typer(make, name="make", help="Make commands")
+app.add_typer(make, help="Make commands")
 
 
 @app.callback(invoke_without_command=True)

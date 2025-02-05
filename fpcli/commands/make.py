@@ -9,7 +9,7 @@ make=typer.Typer()
 
 
 
-@make.command("view")
+@make.command("make:view")
 def view(name: str, app_name: str , 
                sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
                s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.GREEN,bold=True) } "),
@@ -32,7 +32,7 @@ def view(name: str, app_name: str ,
     if(r):
         make_routes(name=name,app_name=app_name)
 
-@make.command("model")
+@make.command("make:model")
 def model(name: str, app_name: str , 
                sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
                s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.GREEN,bold=True) } "),
@@ -54,7 +54,7 @@ def model(name: str, app_name: str ,
 
 
 
-@make.command("schema")
+@make.command("make:schema")
 def schema(name: str, app_name: str , 
                v: bool=typer.Option(False,help=f"for Creating the Views you can pass v. v means { typer.style('View',typer.colors.BRIGHT_YELLOW,bold=True) } "),
                s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.YELLOW,bold=True) } "),
@@ -73,7 +73,7 @@ def schema(name: str, app_name: str ,
     if(r):
         make_routes(name=name,app_name=app_name)
 
-@make.command("service")
+@make.command("make:service")
 def service(name: str, app_name: str , 
                v: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style('Validator',typer.colors.YELLOW,bold=True) }   "),
                m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean  { typer.style('Model',typer.colors.GREEN,bold=True) } "),
@@ -93,7 +93,7 @@ def service(name: str, app_name: str ,
         make_routes(name=name,app_name=app_name)
 
 
-@make.command("middleware")
+@make.command("make:middleware")
 def make_middleware(name: str,app_name:str):
     """
     Generate a middleware file with a user-defined name inside a specific app.
@@ -123,7 +123,7 @@ def make_middleware(name: str,app_name:str):
     typer.echo(f"Middleware '{class_name}' created successfully in '{file_path}'!")
 
 
-@make.command("seeder")
+@make.command("make:seeder")
 def make_seeder(name: str,app_name:str):
     """
     Generate a seeder file with a user-defined name inside a specific app.
@@ -153,7 +153,7 @@ def make_seeder(name: str,app_name:str):
 
 
    
-@make.command("routes")
+@make.command("make:routes")
 def create_routes(name: str, app_name: str, routes: str):
     """
     Generate route file with user-defined routes inside a specific app.
