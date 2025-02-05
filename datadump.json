@@ -5,6 +5,9 @@
         ],
         "data": [
             [
+                "fa405b82ea7f"
+            ],
+            [
                 "71aeb9ce9f2e"
             ]
         ]
@@ -264,5 +267,67 @@
                 null
             ]
         ]
+    },
+    "line": {
+        "columns": [
+            "id",
+            "name",
+            "description",
+            "status",
+            "created_at",
+            "updated_at",
+            "deleted_at"
+        ],
+        "data": []
+    },
+    "area": {
+        "columns": [
+            "id",
+            "line_id",
+            "area_name",
+            "description",
+            "status",
+            "created_at",
+            "updated_at",
+            "deleted_at"
+        ],
+        "data": []
+    },
+    "subarea": {
+        "columns": [
+            "id",
+            "sub_area_name",
+            "area_id",
+            "created_at",
+            "updated_at",
+            "deleted_at"
+        ],
+        "data": []
+    },
+    "equipment_type": {
+        "columns": [
+            "id",
+            "equipment_type_name",
+            "description",
+            "status",
+            "created_at",
+            "updated_at",
+            "deleted_at"
+        ],
+        "data": []
+    },
+    "equipment": {
+        "columns": [
+            "id",
+            "sub_area_id",
+            "equipment_type_id",
+            "equipment_name",
+            "description",
+            "status",
+            "created_at",
+            "updated_at",
+            "deleted_at"
+        ],
+        "data": []
     }
 }
