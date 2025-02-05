@@ -1,6 +1,6 @@
 from .basic import *
 from .startproject import *
-from .startapp_with_folder import *
+from .makeapp import *
 from .startapp import *
 from .dumpdata import *
 from .loaddata import *

@@ -43,7 +43,7 @@ def make_model(name: str, app_name: str):
     check_class(file_path=file_path, app_name=app_name, class_name=class_name)
 
     # Model boilerplate content
-    content = get_model_contant(name=name)
+    content = get_model_contant(name=name,app_name=app_name)
 
     # Ensure the models directory exists
     models_dir.mkdir(parents=True, exist_ok=True)

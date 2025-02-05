@@ -1,95 +1,68 @@
+from pydoc import classname
+
+
 def get_views_content(name: str):
-    class_name = f"{name.capitalize()}Controller"
+    class_name = f"{name.capitalize()}View"
     return f'''
 from fastapi import Request
 
 class {class_name}:
 
     async def index(self):
-        """
-        Get all the data.
-
-        Returns:
-            str: A message indicating that all data is being fetched.
-        """
-        return "getting all data"
+        """Get all the data"""
+        
+        return " Get all the data."
 
     async def edit(self, uuid: str):
-        """
-        Read or edit the data based on the given UUID.
-
-        Args:
-            uuid (str): The unique identifier for the data to be read or edited.
-
-        Returns:
-            str: A message indicating the action for read or edit.
-        """
-        return "for read or edit the data "
+        """Read or edit the data based on the given UUID. """
+        
+        return "Read or edit the data based on the given UUID. "
 
     async def create(self, request: Request):
-        """
-        Create new data based on the request.
+        """Create new data based on the request."""
 
-        Args:
-            request (Request): The request object containing the data to be created.
-
-        Returns:
-            str: A message indicating the creation of new data.
-        """
-        return f"for post request : creating the data"
+        return f"Create new data based on the request."
 
     async def update(self, request: Request, uuid: str):
-        """
-        Update the data based on the given UUID.
-
-        Args:
-            request (Request): The request object containing the updated data.
-            uuid (str): The unique identifier for the data to be updated.
-
-        Returns:
-            str: A message indicating that the data is being updated.
-        """
-        return f"for update the data on the respect of the uuid"
+        """Update the data based on the given UUID."""
+        
+        return f"fUpdate the data based on the given UUID."
 
     async def destroy(self, uuid: str):
-        """
-        Delete the data based on the given UUID.
-
-        Args:
-            uuid (str): The unique identifier for the data to be deleted.
-
-        Returns:
-            str: A message indicating the deletion of the data.
-        """
+        """ Delete the data based on the given UUID."""
+        
         return "for delete the data"
         '''
 
 
-def get_model_contant(name: str):
+def get_model_contant(name: str, app_name: str=None):
     class_name = f"{name.capitalize()}Model"
     return f'''
 from typing import Optional
-from pydantic import BaseModel, Field
-from beanie import Document
+from pydantic import BaseModel
+from sqlmodel import SQLModel,Field
+import datetime
 
-class {class_name}(Document):
-    """
-    {class_name} represents the schema for {name}.
-    """
-    uuid: str = Field(..., description="Unique identifier for the document")
 
+class {class_name}(SQLModel,table=True):
+    """
+    StudentModel represents the schema for student.
+    """
+    __tablename__ = '{app_name}_{name}'
+
+    id: int= Field(default=None, primary_key=True)
+    name: str
     status: Optional[bool] = Field(True, description="Last update timestamp")
-    created_at: Optional[str] = Field(None, description="Creation timestamp")
-    updated_at: Optional[str] = Field(None, description="Last update timestamp")
-    deleted_at: Optional[str] = Field(None, description="Last update timestamp")
+    created_at: datetime = Field(default_factory=datetime.utcnow, description="Creation timestamp")
+    updated_at: Optional[datetime] = Field(default=None, description="Last update timestamp")
+    deleted_at: Optional[datetime] = Field(default=None, description="Deletion timestamp")
 
-    class Settings:
-        name = "{name.lower()}_collection"
+
     '''
 
 
 def get_validator_content(name: str):
-    class_name = f"{name.capitalize()}Validator"
+    class_name = f"{name.capitalize()}Schema"
     return f'''
 from pydantic import BaseModel, Field
 from typing import Optional
@@ -100,9 +73,6 @@ class {class_name}(BaseModel):
     """
     uuid: Optional[str] = Field(None, description="Unique identifier for the data")
     name: str = Field(..., description="Name field")
-    description: Optional[str] = Field(None, description="Description of the entity")
-    created_at: Optional[str] = Field(None, description="Creation timestamp")
-    updated_at: Optional[str] = Field(None, description="Last update timestamp")
     '''
 
 
@@ -111,8 +81,9 @@ def get_servie_content(name: str):
 
     return f'''
 from typing import List, Optional
-from beanie import PydanticObjectId
-from app.models.{name.lower()}_model import {name.capitalize()}Model
+from sqlmodel import Session, select
+from ..models.{name.lower()}_model import {name.capitalize()}Model
+from uuid import UUID
 
 class {class_name}:
     """
@@ -120,78 +91,59 @@ class {class_name}:
     """
 
     @staticmethod
-    async def create(data: dict) -> {name.capitalize()}Model:
+    async def create(session: Session, data: dict) -> {name.capitalize()}Model:
         """
-        Create a new {name}.
-        
-        Args:
-            data (dict): The data to create the {name}.
-        
-        Returns:
-            {name.capitalize()}Model: The created {name}.
+        Create a new {name.capitalize()}.
         """
         instance = {name.capitalize()}Model(**data)
-        await instance.insert()
+        session.add(instance)
+        session.commit()
+        session.refresh(instance)
         return instance
 
     @staticmethod
-    async def get_all() -> List[{name.capitalize()}Model]:
+    async def get_all(session: Session) -> List[{name.capitalize()}Model]:
         """
         Fetch all {name}s.
-        
+
         Returns:
             List[{name.capitalize()}Model]: List of all {name}s.
         """
-        return await {name.capitalize()}Model.find_all().to_list()
+        result = session.exec(select({name.capitalize()}Model)).all()
+        return result
 
     @staticmethod
-    async def get_by_id(id: PydanticObjectId) -> Optional[{name.capitalize()}Model]:
+    async def get_by_id(session: Session, uuid: UUID) -> Optional[{name.capitalize()}Model]:
         """
-        Fetch a {name} by its ID.
-        
-        Args:
-            id (PydanticObjectId): The unique identifier of the {name}.
-        
-        Returns:
-            Optional[{name.capitalize()}Model]: The {name} if found, else None.
+        Fetch a {name} by its UUID.
         """
-        return await {name.capitalize()}Model.get(id)
+        return session.get({name.capitalize()}Model, uuid)
 
     @staticmethod
-    async def update(id: PydanticObjectId, data: dict) -> Optional[{name.capitalize()}Model]:
+    async def update(session: Session, uuid: UUID, data: dict) -> Optional[{name.capitalize()}Model]:
         """
         Update an existing {name}.
-        
-        Args:
-            id (PydanticObjectId): The unique identifier of the {name}.
-            data (dict): The updated data.
-        
-        Returns:
-            Optional[{name.capitalize()}Model]: The updated {name} if successful, else None.
         """
-        instance = await {name.capitalize()}Model.get(id)
+        instance = session.get({name.capitalize()}Model, uuid)
         if instance:
             for key, value in data.items():
                 setattr(instance, key, value)
-            await instance.save()
+            session.commit()
+            session.refresh(instance)
         return instance
 
     @staticmethod
-    async def delete(id: PydanticObjectId) -> bool:
+    async def delete(session: Session, uuid: UUID) -> bool:
         """
-        Delete a {name} by its ID.
-        
-        Args:
-            id (PydanticObjectId): The unique identifier of the {name}.
-        
-        Returns:
-            bool: True if deletion was successful, False otherwise.
+        Delete a {name} by its UUID.
         """
-        instance = await {name.capitalize()}Model.get(id)
+        instance = session.get({name.capitalize()}Model, uuid)
         if instance:
-            await instance.delete()
+            session.delete(instance)
+            session.commit()
             return True
         return False
+
     '''
 
 

@@ -1,11 +1,11 @@
 import os
 from pathlib import Path
+from click import Option, option
 import typer
-
-from fpcli.commands.startapp_with_folder import startapp_with_folder_structure
 
 from ..function.startproject import create_file
 from ..content.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
+from .makeapp import makeapp_with_folder
 from .basic import app
 
 def create_folder_structure(base_dir: str):
@@ -34,10 +34,10 @@ def create_folder_structure(base_dir: str):
         create_file(file, content)
     
 @app.command("startapp")
-def startapp(name: str, f:bool=typer.Option(False,help="if you pass the --f then you can create the App with folder structure")):
-    """Create a new app structure."""
+def startapp(name: str, f:bool=typer.Option(False, help="if you passs the --f then you will get the structure into with folder")):
+    """Create a new APP Structure. --f to Create APP with Folder structure"""
     if f:
-        startapp_with_folder_structure(name=name)
+        makeapp_with_folder(name=name)
     else:
         base_dir = Path(name).resolve()
         os.makedirs(base_dir, exist_ok=True)

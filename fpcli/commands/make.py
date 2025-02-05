@@ -99,8 +99,9 @@ def make_middleware(name: str,app_name:str):
     Generate a middleware file with a user-defined name inside a specific app.
     """
     # Directory paths
-    middleware_folder = app_name/"/middleware"
     app_dir = check_app(app_name=app_name)
+    middleware_folder = "middleware"
+
     middleware_dir = app_dir / middleware_folder
 
     # Capitalize the middleware name and generate file name
@@ -112,7 +113,7 @@ def make_middleware(name: str,app_name:str):
     check_class(file_path=file_path, app_name=app_name, class_name=class_name)
 
     # Middleware boilerplate content
-    content = get_middleware_content(name=name, app_name=app_name)
+    content = get_middleware_content(name=name)
 
     # Ensure the middleware directory exists
     middleware_dir.mkdir(parents=True, exist_ok=True)
