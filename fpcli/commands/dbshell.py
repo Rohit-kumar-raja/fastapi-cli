@@ -2,10 +2,9 @@ from click import echo
 import typer
 import subprocess
 import os
-
+from .basic import app
 from fpcli.function.get_settings import get_settings
 
-app = typer.Typer()
 
 settings=get_settings()
 # Hardcoded database settings (Replace with actual values or environment variables)
