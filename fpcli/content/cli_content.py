@@ -81,69 +81,61 @@ def get_servie_content(name: str):
 
     return f'''
 from typing import List, Optional
-from sqlmodel import Session, select
-from ..models.{name.lower()}_model import {name.capitalize()}Model
+from sqlmodel import select
 from uuid import UUID
+from ..models.{name.lower()}_model import {name.capitalize()}Model
+from .. import db
 
-class {class_name}:
+class {name.capitalize()}Service:
     """
-    {class_name} handles the business logic and database operations for {name}.
+    {name.capitalize()}Service handles the business logic and database operations for {name}.
     """
 
     @staticmethod
-    async def create(session: Session, data: dict) -> {name.capitalize()}Model:
-        """
-        Create a new {name.capitalize()}.
-        """
-        instance = {name.capitalize()}Model(**data)
-        session.add(instance)
-        session.commit()
-        session.refresh(instance)
-        return instance
+    async def create(data: dict) -> {name.capitalize()}Model:
+        """Create a new {name.capitalize()}. """
+        async with db() as session:
+            instance = {name.capitalize()}Model(**data)
+            session.add(instance)
+            await session.commit()
+            await session.refresh(instance)
+            return instance
 
     @staticmethod
-    async def get_all(session: Session) -> List[{name.capitalize()}Model]:
-        """
-        Fetch all {name}s.
-
-        Returns:
-            List[{name.capitalize()}Model]: List of all {name}s.
-        """
-        result = session.exec(select({name.capitalize()}Model)).all()
-        return result
+    async def get_all() -> List[{name.capitalize()}Model]:
+        """Fetch all {name}s."""
+        async with db() as session:
+            result = await session.execute(select({name.capitalize()}Model))
+            return result.scalars().all()
 
     @staticmethod
-    async def get_by_id(session: Session, uuid: UUID) -> Optional[{name.capitalize()}Model]:
-        """
-        Fetch a {name} by its UUID.
-        """
-        return session.get({name.capitalize()}Model, uuid)
+    async def get_by_id(uuid: UUID) -> Optional[{name.capitalize()}Model]:
+        """Fetch a {name} by its UUID."""
+        async with db() as session:
+            return session.get({name.capitalize()}Model, uuid)
 
     @staticmethod
-    async def update(session: Session, uuid: UUID, data: dict) -> Optional[{name.capitalize()}Model]:
-        """
-        Update an existing {name}.
-        """
-        instance = session.get({name.capitalize()}Model, uuid)
-        if instance:
-            for key, value in data.items():
-                setattr(instance, key, value)
-            session.commit()
-            session.refresh(instance)
-        return instance
+    async def update(uuid: UUID, data: dict) -> Optional[{name.capitalize()}Model]:
+        """Update an existing {name}."""
+        async with db() as session:
+            instance = session.get({name.capitalize()}Model, uuid)
+            if instance:
+                for key, value in data.items():
+                    setattr(instance, key, value)
+                await session.commit()
+                await session.refresh(instance)
+            return instance
 
     @staticmethod
-    async def delete(session: Session, uuid: UUID) -> bool:
-        """
-        Delete a {name} by its UUID.
-        """
-        instance = session.get({name.capitalize()}Model, uuid)
-        if instance:
-            session.delete(instance)
-            session.commit()
-            return True
-        return False
-
+    async def delete(uuid: UUID) -> bool:
+        """Delete a {name} by its UUID."""
+        async with db() as session:
+            instance = session.get({name.capitalize()}Model, uuid)
+            if instance:
+                await session.delete(instance)
+                await session.commit()
+                return True
+            return False
     '''
 
 

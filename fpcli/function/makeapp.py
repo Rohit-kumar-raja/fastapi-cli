@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 import typer
 
+from ..content.startapp import get_init_content
+
 from .startproject import create_file
 from ..content.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
 from ..fpcli_settings import app_folder
@@ -24,7 +26,7 @@ def makeapp_with_folder(base_dir: str):
         f"{base_dir}/views/welcome_views.py": "#Welcome Controller  "+get_welcome_controller_contant(),
         f"{base_dir}/models/__init__.py": "#Register all the model here Example below \n\n#from .user_model import UserModel",
         f"{base_dir}/test/__init__.py": "#Register all the test cases here Example below \n\n#from .user_test import UserTest",
-        f"{base_dir}/__init__.py": "# Configuration file",
+        f"{base_dir}/__init__.py": "# Configuration file\n"+get_init_content()
     }
 
     # Create folders

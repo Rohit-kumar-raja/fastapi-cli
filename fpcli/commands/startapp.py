@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
 import typer
-from fpcli.function.check_app import is_exits
+from ..content.startapp import get_init_content
+from ..function.check_app import is_exits
 from ..function.startproject import create_file
 from ..content.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
 from ..function.makeapp import makeapp_with_folder
@@ -14,7 +15,7 @@ def create_folder_structure(base_dir: str):
     ]
 
     files = {
-        f"{base_dir}/__init__.py": "# Configuration file",
+        f"{base_dir}/__init__.py": "# Configuration file\n"+get_init_content(),
         f"{base_dir}/urls.py": "# all routes file\n"+get_urls_contant(),
         f"{base_dir}/utils.py": "# Utility functions \n\n"+get_helper_utilities_content(),
         f"{base_dir}/views.py": "#Welcome View  "+get_welcome_controller_contant(),

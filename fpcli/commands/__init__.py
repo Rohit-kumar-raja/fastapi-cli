@@ -7,3 +7,4 @@ from .loaddata import *
 from .migrations import *
 from .make import *
 from .testmail import *
+from .collect_static import *
