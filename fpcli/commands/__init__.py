@@ -8,3 +8,5 @@ from .migrations import *
 from .make import *
 from .testmail import *
 from .collect_static import *
+from .shell import *
+from .dbshell import *
