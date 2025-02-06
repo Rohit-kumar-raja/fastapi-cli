@@ -10,3 +10,13 @@ def get_settings():
 
     settings = importlib.import_module(settings_path)
     return settings.settings
+
+def get_settings_class():
+    # Dynamically import settings
+    settings_path = f"{config_folder}.settings"
+    spec = importlib.util.find_spec(settings_path)
+    if spec is None:
+        raise ImportError(f"Settings module not found in {config_folder}")
+
+    settings = importlib.import_module(settings_path)
+    return settings

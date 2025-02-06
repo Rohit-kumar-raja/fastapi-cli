@@ -1,11 +1,14 @@
 from pathlib import Path
-from dotenv import load_dotenv
-from pydantic import Field, AnyUrl
+from pydantic import Field
 from pydantic_settings import BaseSettings
+from dotenv import load_dotenv
 
 
 # Define the base path directly
 BASE_DIR = Path(__file__).resolve().parent.parent
+INSTALLED_APPS = ['app2', 'auth']
+MIDDLEWARES = ['LoggingMiddleware']
+
 class Settings(BaseSettings):
     BASE_DIR: Path = BASE_DIR
 
@@ -19,6 +22,8 @@ class Settings(BaseSettings):
     APP_NETWORK: str = Field(..., description="Network name")
     APP_LOG_PATH: Path = Field(..., description="Path to application log file")
     APP_LOG_LEVEL: str = Field(..., description="Log level for the application")
+    APP_TIMEZONE:str = Field(..., description="timezone for the app")
+    APP_LOG_VOLUME:str = Field(..., description="timezone for the app")
 
     # Database settings
     DB_HOST: str = Field(..., description="Database host")
@@ -32,9 +37,9 @@ class Settings(BaseSettings):
     # Email settings
     SMTP_SERVER: str = Field(..., description="SMTP server")
     SMTP_PORT: int = Field(..., description="SMTP port")
-    SENDER_EMAIL: str = Field(..., description="Sender email")
-    SMTP_USERNAME: str = Field(..., description="Smtp server username")
+    SMTP_USERNAME: str = Field(..., description="SMTP username")
     SMTP_PASSWORD: str = Field(..., description="SMTP password")
+    SENDER_EMAIL: str = Field(..., description="Sender email")
 
     # PGAdmin settings
     PGADMIN_DEFAULT_EMAIL: str = Field(..., description="PGAdmin default email")
@@ -43,12 +48,12 @@ class Settings(BaseSettings):
     PGADMIN_CONTAINER: str = Field(..., description="PGAdmin container")
 
     class Config:
-        env_file = ".env"
+        env_file = "/app/.env"
         env_file_encoding = "utf-8"
-
-# settings = Settings()
 
 def reload_settings() -> Settings:
     load_dotenv(override=True)  # Reload .env values, override any existing env vars
     return Settings()  # Return the new instance of Settings
+
+
 settings=reload_settings()

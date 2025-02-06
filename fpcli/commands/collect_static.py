@@ -1,14 +1,16 @@
-from tabnanny import verbose
 import typer
 import shutil
-import os
 import time
 from pathlib import Path
 from .basic import app
 from ..fpcli_settings import app_folder
+from ..function.get_settings import get_settings_class
 
 # Define installed apps list (Modify this based on how apps are registered in your project)
-INSTALLED_APPS = ["app", "app2", "app3"]  # Example: List of app names
+
+settings_class=get_settings_class()
+
+INSTALLED_APPS = settings_class.INSTALLED_APPS  # Example: List of app names
 base_dir = Path(f"{app_folder}").resolve()
 
 def get_app_static_dirs() -> dict[str, Path]:
@@ -70,13 +72,15 @@ def collectstatic(
     
     app_static_dirs = get_app_static_dirs()
 
+    if clear and destination.exists():
+        shutil.rmtree(destination)
+        # typer.echo(f"Cleared {destination}")
+
     if not app_static_dirs:
         typer.echo("No static directories found in installed apps.")
         raise typer.Exit(1)
 
-    if clear and destination.exists():
-        shutil.rmtree(destination)
-        # typer.echo(f"Cleared {destination}")
+ 
 
     copy_static_files(app_static_dirs, destination,verbose=verbose)
     typer.echo(typer.style("🎉 Static files collection completed.",typer.colors.GREEN,bold=True))
