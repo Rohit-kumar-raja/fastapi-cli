@@ -1,5 +1,5 @@
 import typer
-from .commands import *  # Ensure make is a Typer() instance in commands.py
+from .commands import app, make  # Ensure make is a Typer() instance in commands.py 
 
 # app = typer.Typer()  # Initialize main Typer app
 

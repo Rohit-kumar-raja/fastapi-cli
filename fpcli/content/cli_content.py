@@ -39,21 +39,20 @@ def get_model_contant(name: str, app_name: str=None):
     class_name = f"{name.capitalize()}Model"
     return f'''
 from typing import Optional
-from pydantic import BaseModel
 from sqlmodel import SQLModel,Field
-import datetime
+from datetime import datetime
 
 
 class {class_name}(SQLModel,table=True):
     """
     StudentModel represents the schema for student.
     """
-    __tablename__ = '{app_name}_{name}'
+    __tablename__ = '{app_name.lower()}_{name.lower()}'
 
     id: int= Field(default=None, primary_key=True)
     name: str
     status: Optional[bool] = Field(True, description="Last update timestamp")
-    created_at: datetime = Field(default_factory=datetime.utcnow, description="Creation timestamp")
+    created_at: datetime = Field(default_factory=datetime.now, description="Creation timestamp")
     updated_at: Optional[datetime] = Field(default=None, description="Last update timestamp")
     deleted_at: Optional[datetime] = Field(default=None, description="Deletion timestamp")
 

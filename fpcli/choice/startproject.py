@@ -1,10 +1,9 @@
-import os
 import typer
 import subprocess
 
 from ..function.startproject import  write_append_file
 
-from ..content.startproject import get_config_setting_content, get_database_contant, get_database_env_content
+from ..content.startproject import get_config_setting_content, get_database_env_content
 
 class StartProjectChoice:
     database_choice:int=0
@@ -29,7 +28,7 @@ class StartProjectChoice:
                 typer.echo("Installing uv...")
                 try:
                     subprocess.run(["pip", "install", "uv"], check=True)
-                except:
+                except Exception :
                     subprocess.run(["pipx", "install", "uv"], check=True)
 
                 subprocess.run(['uv','init'])
@@ -43,7 +42,7 @@ class StartProjectChoice:
                 typer.echo("Installing poetry...")
                 try:
                     subprocess.run(["pip", "install", "poetry"], check=True)
-                except:
+                except Exception:
                     subprocess.run(["pipx", "install", "poetry"], check=True)
 
                 subprocess.run(['poetry','init'])
