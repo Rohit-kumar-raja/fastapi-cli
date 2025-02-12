@@ -9,7 +9,7 @@ def get_settings():
         raise ImportError(f"Settings module not found in {config_folder}")
 
     settings = importlib.import_module(settings_path)
-    return settings.settings
+    return settings.Settings()
 
 def get_settings_class():
     # Dynamically import settings

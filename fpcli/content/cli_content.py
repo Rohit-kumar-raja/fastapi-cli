@@ -13,15 +13,15 @@ class {class_name}:
         
         return " Get all the data."
 
+    async def create(self, request: Request):
+        """Create new data based on the request."""
+        return f"Create new data based on the request."
+
+
     async def edit(self, uuid: str):
         """Read or edit the data based on the given UUID. """
         
         return "Read or edit the data based on the given UUID. "
-
-    async def create(self, request: Request):
-        """Create new data based on the request."""
-
-        return f"Create new data based on the request."
 
     async def update(self, request: Request, uuid: str):
         """Update the data based on the given UUID."""
@@ -45,7 +45,7 @@ from datetime import datetime
 
 class {class_name}(SQLModel,table=True):
     """
-    StudentModel represents the schema for student.
+    {class_name} represents the schema for {app_name.lower()}_{name.lower()}.
     """
     __tablename__ = '{app_name.lower()}_{name.lower()}'
 
@@ -55,8 +55,7 @@ class {class_name}(SQLModel,table=True):
     created_at: datetime = Field(default_factory=datetime.now, description="Creation timestamp")
     updated_at: Optional[datetime] = Field(default=None, description="Last update timestamp")
     deleted_at: Optional[datetime] = Field(default=None, description="Deletion timestamp")
-
-
+    
     '''
 
 
@@ -111,7 +110,7 @@ class {name.capitalize()}Service:
     async def get_by_id(uuid: UUID) -> Optional[{name.capitalize()}Model]:
         """Fetch a {name} by its UUID."""
         async with db() as session:
-            return session.get({name.capitalize()}Model, uuid)
+            return await session.get({name.capitalize()}Model, uuid)
 
     @staticmethod
     async def update(uuid: UUID, data: dict) -> Optional[{name.capitalize()}Model]:
