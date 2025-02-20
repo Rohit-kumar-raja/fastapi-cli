@@ -1,10 +1,10 @@
 import typer
 import subprocess
 import os
-from ..fpcli_settings import app_folder
+from ..fpcli_settings import APP_FOLDER
 from .basic import app
 
-APPS_DIR = app_folder   # Adjust this path as needed
+APPS_DIR = APP_FOLDER   # Adjust this path as needed
 
 def discover_test_modules():
     """Discover test modules in FastAPI apps."""

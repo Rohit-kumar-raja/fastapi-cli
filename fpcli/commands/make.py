@@ -1,4 +1,6 @@
 import typer
+
+from ..function.make_ai_test_case import test_file_processing
 from ..template.cli_content import get_middleware_content, get_seeder_content
 from ..function.check_class import check_class
 from ..function.check_app import check_app
@@ -92,27 +94,6 @@ def service(name: str, app_name: str ,
         make_routes(name=name,app_name=app_name)
         
 
-@make.command("make:test")
-def make_test(name: str, app_name: str , 
-               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass V. V mean { typer.style('Validator',typer.colors.YELLOW,bold=True) }   "),
-               s: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style('Service',typer.colors.BRIGHT_MAGENTA,bold=True) }   "),
-               m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean  { typer.style('Model',typer.colors.GREEN,bold=True) } "),
-               sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
-               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } ")):
-    """
-    Generate a service class file with a user-defined name inside a specific app.
-    """
-    make_tests(name=name,app_name=app_name)
-    if(s):
-        make_service(name=name,app_name=app_name)
-    if(v):
-        make_views(name=name,app_name=app_name)
-    if(m):
-        make_model(name=name,app_name=app_name)
-    if(sc):
-        make_schema(name=name,app_name=app_name)
-    if(r):
-        make_routes(name=name,app_name=app_name)
 
 
 @make.command("make:middleware")
@@ -183,4 +164,31 @@ def create_routes(name: str, app_name: str, routes: str):
     Example: 'GET,POST,PUT'
     """
     # make_routes(name, app_name, routes)
+    
+
+@make.command("make:test")
+def make_test(name: str, app_name: str , 
+               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass V. V mean { typer.style('Validator',typer.colors.YELLOW,bold=True) }   "),
+               s: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style('Service',typer.colors.BRIGHT_MAGENTA,bold=True) }   "),
+               m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean  { typer.style('Model',typer.colors.GREEN,bold=True) } "),
+               sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
+               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } "),
+               ai: bool=typer.Option(False,help=f"If you passed the AI then automatically generate the test case file   { typer.style('Test file',typer.colors.BRIGHT_BLUE,bold=True) } ")):
+    """
+    Generate a service class file with a user-defined name inside a specific app.
+    """
+    if(ai):
+        test_file_processing(app_name=app_name,keyword=name)
+    else:
+        make_tests(name=name,app_name=app_name)
+    if(s):
+        make_service(name=name,app_name=app_name)
+    if(v):
+        make_views(name=name,app_name=app_name)
+    if(m):
+        make_model(name=name,app_name=app_name)
+    if(sc):
+        make_schema(name=name,app_name=app_name)
+    if(r):
+        make_routes(name=name,app_name=app_name)
 

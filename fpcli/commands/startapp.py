@@ -7,7 +7,7 @@ from ..function.startproject import create_file
 from ..template.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
 from ..function.makeapp import makeapp_with_folder
 from .basic import app
-from ..fpcli_settings import app_folder
+from ..fpcli_settings import APP_FOLDER
 
 def create_folder_structure(base_dir: str):
     """Creates the folder and file structure."""
@@ -36,7 +36,7 @@ def create_folder_structure(base_dir: str):
 def startapp(app_name: str, nofolder: bool = typer.Option(False, help="Pass --nofolder to create a simple file-based app")):
     """Create a new APP Structure. --f to Create APP with Folder structure"""
     is_exits(app_name=app_name)
-    base_dir = Path(f"{app_folder}/{app_name}").resolve()
+    base_dir = Path(f"{APP_FOLDER}/{app_name}").resolve()
     if nofolder:
         create_folder_structure(str(base_dir))
     else:

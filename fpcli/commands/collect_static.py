@@ -3,7 +3,7 @@ import shutil
 import time
 from pathlib import Path
 from .basic import app
-from ..fpcli_settings import app_folder
+from ..fpcli_settings import APP_FOLDER
 from ..function.get_settings import get_settings_class
 
 # Define installed apps list (Modify this based on how apps are registered in your project)
@@ -13,7 +13,7 @@ def get_app_static_dirs() -> dict[str, Path]:
     settings_class = get_settings_class()
 
     INSTALLED_APPS = settings_class.INSTALLED_APPS  # Example: List of app names
-    base_dir = Path(f"{app_folder}").resolve()
+    base_dir = Path(f"{APP_FOLDER}").resolve()
     """Finds static directories inside installed apps."""
     static_dirs = {}
     for app_name in INSTALLED_APPS:

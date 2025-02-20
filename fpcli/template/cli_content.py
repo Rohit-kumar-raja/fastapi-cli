@@ -229,10 +229,10 @@ def get_route_content(controller_name: str, method: str, route_name: str):
 
 
 def get_test_case_content(name: str):
-    from ..fpcli_settings import config_folder
+    from ..fpcli_settings import CONFIG_FOLDER
     return f"""
 from fastapi.testclient import TestClient
-from {config_folder.lower()}.main import app  
+from {CONFIG_FOLDER.lower()}.main import app  
 
 client = TestClient(app)
 

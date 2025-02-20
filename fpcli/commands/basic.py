@@ -2,7 +2,7 @@
 from pathlib import Path
 import typer
 from ..template.cli_content import *
-from ..fpcli_settings import config_folder
+from ..fpcli_settings import CONFIG_FOLDER
 import socket
 import typer
 
@@ -53,7 +53,7 @@ def run_server(
         port = find_available_port(host, port)
 
         typer.echo(f"Starting server in {environment} mode at http://{host}:{port} with {workers} workers...")
-        uvicorn.run(f"{config_folder}.main:app", host=host, port=port, reload=reload, workers=workers)
+        uvicorn.run(f"{CONFIG_FOLDER}.main:app", host=host, port=port, reload=reload, workers=workers)
         print(f"🎉 Server started. at http://{host}:{port}")
 
     except Exception as e:
