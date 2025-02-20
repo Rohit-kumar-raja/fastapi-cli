@@ -5,3 +5,8 @@ build
 *.egg-info
 apps
 static
+.pytest_cache
+.coverage
+htmlcov
+.idea
+.vscode

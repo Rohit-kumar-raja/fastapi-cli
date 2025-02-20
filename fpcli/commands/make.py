@@ -1,9 +1,8 @@
 import typer
-from ..content.cli_content import *
+from ..template.cli_content import get_middleware_content, get_seeder_content
 from ..function.check_class import check_class
 from ..function.check_app import check_app
-from ..function.basic import make_model, make_routes, make_schema, make_service,  make_views
-from .basic import app
+from ..function.basic import make_model, make_routes, make_schema, make_service, make_tests,  make_views
 
 make=typer.Typer()
 
@@ -83,6 +82,29 @@ def service(name: str, app_name: str ,
     Generate a service class file with a user-defined name inside a specific app.
     """
     make_service(name=name,app_name=app_name)
+    if(v):
+        make_views(name=name,app_name=app_name)
+    if(m):
+        make_model(name=name,app_name=app_name)
+    if(sc):
+        make_schema(name=name,app_name=app_name)
+    if(r):
+        make_routes(name=name,app_name=app_name)
+        
+
+@make.command("make:test")
+def make_test(name: str, app_name: str , 
+               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass V. V mean { typer.style('Validator',typer.colors.YELLOW,bold=True) }   "),
+               s: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style('Service',typer.colors.BRIGHT_MAGENTA,bold=True) }   "),
+               m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean  { typer.style('Model',typer.colors.GREEN,bold=True) } "),
+               sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
+               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } ")):
+    """
+    Generate a service class file with a user-defined name inside a specific app.
+    """
+    make_tests(name=name,app_name=app_name)
+    if(s):
+        make_service(name=name,app_name=app_name)
     if(v):
         make_views(name=name,app_name=app_name)
     if(m):

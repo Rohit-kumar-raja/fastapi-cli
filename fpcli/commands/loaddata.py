@@ -3,7 +3,7 @@ from ..connection import get_postgresql_connection
 import json
 import typer
 
-@app.command("loaddata")
+@app.command("importdata")
 def load_json(input_file: str):
     """Load JSON data into the PostgreSQL database (import table data)."""
     try:

@@ -2,10 +2,10 @@ import os
 from pathlib import Path
 import typer
 
-from ..content.startapp import get_init_content
+from ..template.startapp import get_init_content
 
 from .startproject import create_file
-from ..content.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
+from ..template.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
 from ..fpcli_settings import app_folder
 
 def makeapp_with_folder(base_dir: str):

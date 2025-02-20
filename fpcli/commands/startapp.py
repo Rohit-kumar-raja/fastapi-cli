@@ -1,10 +1,10 @@
 import os
 from pathlib import Path
 import typer
-from ..content.startapp import get_init_content
+from ..template.startapp import get_init_content
 from ..function.check_app import is_exits
 from ..function.startproject import create_file
-from ..content.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
+from ..template.startproject import   get_helper_utilities_content,  get_urls_contant, get_welcome_controller_contant
 from ..function.makeapp import makeapp_with_folder
 from .basic import app
 from ..fpcli_settings import app_folder

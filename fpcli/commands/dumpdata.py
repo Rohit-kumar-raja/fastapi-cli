@@ -51,7 +51,7 @@ def export_to_sql(data, output):
             
             f.write("\n")
 
-@app.command("datadump")
+@app.command("exportdata")
 def datadump(
     output: str = "datadump.json",
     include: list[str] = typer.Option(None, help="List of tables to include"),

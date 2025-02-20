@@ -5,7 +5,7 @@ import typer
 from ..choice.startproject import StartProjectChoice
 from ..function.startproject import create_and_activate_env, create_file
 
-from ..content.startproject import get_api_contant, get_console_content, get_database_contant, get_env_file_content, get_gitignore_contant, get_helper_utilities_content, get_loging_contant, get_manage_contant, get_server_contant, get_urls_contant, get_welcome_controller_contant
+from ..template.startproject import get_api_contant, get_console_content, get_database_contant, get_env_file_content, get_gitignore_contant, get_helper_utilities_content, get_loging_contant, get_manage_contant, get_server_contant, get_urls_contant, get_welcome_controller_contant
 from .basic import app
 
 

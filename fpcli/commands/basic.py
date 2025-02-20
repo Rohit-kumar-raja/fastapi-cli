@@ -1,7 +1,7 @@
 
 from pathlib import Path
 import typer
-from ..content.cli_content import *
+from ..template.cli_content import *
 from ..fpcli_settings import config_folder
 import socket
 import typer

@@ -2,9 +2,9 @@ from ..function.get_settings import get_settings
 from .basic import app
 import typer
 
-settings = get_settings()
 
 def send_email(to: str, subject: str, body: str):
+    settings = get_settings()
     """Send a test email."""
     import emails
     try:

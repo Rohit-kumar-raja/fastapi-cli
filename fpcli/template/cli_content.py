@@ -35,7 +35,7 @@ class {class_name}:
         '''
 
 
-def get_model_contant(name: str, app_name: str=None):
+def get_model_contant(name: str, app_name: str = None):
     class_name = f"{name.capitalize()}Model"
     return f'''
 from typing import Optional
@@ -209,23 +209,53 @@ class {class_name}:
     '''
 
 
-
-
 def get_route_content(controller_name: str, method: str, route_name: str):
     """
     Generate FastAPI route snippet in the format of app_router.add_api_route.
-    
+
     Args:
         controller_name (str): The name of the controller (e.g., UserController).
         method (str): HTTP method (GET, POST, PUT, DELETE, etc.).
         route_name (str): The route name (e.g., '/user/', '/user/create').
-    
+
     Returns:
         str: The generated route snippet in the desired format.
     """
     # Extract the controller method name dynamically
-    controller_method = route_name.strip('/').replace('/', '_')
+    controller_method = route_name.strip("/").replace("/", "_")
 
     # Generate the route content in app_router.add_api_route format
     return f'app_router.add_api_route("{route_name}", {controller_name}().{controller_method}, methods={["{method}"]})'
 
+
+def get_test_case_content(name: str):
+    from ..fpcli_settings import config_folder
+    return f"""
+from fastapi.testclient import TestClient
+from {config_folder.lower()}.main import app  
+
+client = TestClient(app)
+
+async def test_list_{name}(self):
+    response = client.get("/{name}s")
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+
+async def test_create_{name}(self):
+    response = client.post("/{name}s", json={{"name": "test"}})
+    assert response.status_code == 201
+    assert response.json()["name"] == "test"
+
+async def test_get_{name}(self):
+    response = client.get("/{name}s/1")
+    assert response.status_code == 200
+    assert response.json()["name"] == "test"
+
+async def test_update_{name}(self):
+    response = client.put("/{name}s/1", json={{"name": "updated"}})
+    assert response.status_code == 200
+    assert response.json()["name"] == "updated"
+
+async def test_delete_{name}(self):
+    response = client.delete("/{name}s/1")
+    assert response.status_code == 200"""

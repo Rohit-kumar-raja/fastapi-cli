@@ -6,16 +6,18 @@ from .basic import app
 from fpcli.function.get_settings import get_settings
 
 
-settings=get_settings()
-# Hardcoded database settings (Replace with actual values or environment variables)
-DB_ENGINE="postgresql"
-DB_USER = settings.DB_USER
-DB_PASSWORD = settings.DB_PASSWORD 
-DB_HOST = settings.DB_HOST 
-DB_NAME = settings.DB_NAME 
 
 @app.command("dbshell")
 def dbshell():
+    
+    
+    settings=get_settings()
+    # Hardcoded database settings (Replace with actual values or environment variables)
+    DB_ENGINE="postgresql"
+    DB_USER = settings.DB_USER
+    DB_PASSWORD = settings.DB_PASSWORD 
+    DB_HOST = settings.DB_HOST 
+    DB_NAME = settings.DB_NAME 
     """Open the database shell."""
     if DB_ENGINE == "postgresql":
         try:

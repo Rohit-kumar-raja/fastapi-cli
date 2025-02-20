@@ -1,5 +1,5 @@
 import typer
-from ..content.cli_content import *
+from ..template.cli_content import get_test_case_content, get_views_content, get_model_contant, get_validator_content, get_servie_content, get_route_content
 from ..function.check_class import check_class
 from ..function.check_app import check_app
 
@@ -66,7 +66,7 @@ def make_schema(name: str, app_name: str):
     check_class(file_path=file_path, app_name=app_name, class_name=class_name)
 
     # Validator boilerplate content
-    content = get_validator_content(name=name)
+    content = get_validator_content(name=name)  # noqa: F405
     # Ensure the validators directory exists
     validators_dir.mkdir(parents=True, exist_ok=True)
 
@@ -126,5 +126,26 @@ def make_routes(name: str, app_name: str, routes: list):
 
     typer.echo(f"Routes for '{controller_name}' created successfully in '{file_path}'!")
   
+def make_tests(name: str, app_name: str):
+   
+    # Directory paths
+    app_dir = check_app(app_name=app_name)
 
+    services_dir = app_dir / "tests"
+    # Capitalize the service name and generate file name
+    class_name = f"{name.capitalize()}Test"
+    file_name = f"{name.lower()}_test.py"
+    file_path = services_dir / file_name
+
+    # Check if the service file already exists
+    check_class(file_path=file_path, app_name=app_name, class_name=class_name)
+
+    # Service boilerplate content
+
+    # Ensure the services directory exists
+    services_dir.mkdir(parents=True, exist_ok=True)
+    content = get_test_case_content(name=name)
+    # Write the service file
+    file_path.write_text(content)
+    typer.echo(f"Service '{class_name}' created successfully in '{file_path}'!")
 

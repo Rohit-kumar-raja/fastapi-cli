@@ -3,7 +3,7 @@ import subprocess
 
 from ..function.startproject import  write_append_file
 
-from ..content.startproject import get_config_setting_content, get_database_env_content
+from ..template.startproject import get_config_setting_content, get_database_env_content
 
 class StartProjectChoice:
     database_choice:int=0
