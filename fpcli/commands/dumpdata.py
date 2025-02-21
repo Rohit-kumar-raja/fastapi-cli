@@ -1,4 +1,3 @@
-import os
 import json
 import typer
 from .basic import app

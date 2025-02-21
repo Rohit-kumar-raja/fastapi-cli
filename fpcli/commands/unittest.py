@@ -10,7 +10,7 @@ def discover_test_modules():
     """Discover test modules in FastAPI apps."""
     test_modules = []
     for app_name in os.listdir(APPS_DIR):
-        test_dir = os.path.join(APPS_DIR, app_name, "test")  # Adjusted to 'test' instead of 'tests'
+        test_dir = os.path.join(APPS_DIR, app_name, "tests")  # Adjusted to 'tests' instead of 'tests'
         if os.path.exists(test_dir):
             test_modules.append(test_dir)
     return test_modules
