@@ -132,8 +132,7 @@ def make_seeder(name: str,app_name:str):
     Generate a seeder file with a user-defined name inside a specific app.
     """
     # Directory paths
-    seederfolder="database"
-    app_dir = check_app(app_name=seederfolder)
+    app_dir = check_app(app_name=app_name)
     middleware_dir = app_dir / "seeders"
 
     # Capitalize the seeder name and generate file name

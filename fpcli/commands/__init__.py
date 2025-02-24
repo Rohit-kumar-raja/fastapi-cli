@@ -11,3 +11,4 @@ from .collect_static import *
 from .pyshell import *
 from .dbshell import *
 from .unittest import *
+from .dbseed import *

@@ -175,8 +175,7 @@ def get_seeder_content(name: str, app_name: str):
     class_name = f"{name.capitalize()}Seeder"
     service_name = f"{name.capitalize()}Service"
     return f'''
-import asyncio
-from {app_name.lower()}.services.{name.lower()}_service import {service_name}
+from ..services.{name.lower()}_service import {service_name}
 
 class {class_name}:
     """
@@ -188,21 +187,19 @@ class {class_name}:
         """
         Run the seeder to insert sample data into the database.
         """
-        data = [
+        records = [
             {{
-                "status": True,
-                "created_at": "2025-01-01T00:00:00Z",
-                "updated_at": "2025-01-01T00:00:00Z"
+                "name": "{name.capitalize()}1",
+               
             }},
             {{
-                "status": False,
-                "created_at": "2025-01-02T00:00:00Z",
-                "updated_at": "2025-01-02T00:00:00Z"
+                "name": "{name.capitalize()}2",
+
             }}
         ]
 
         # Insert the data into the database using a loop
-        for record in data:
+        for record in records:
             await {service_name}.create(record)
 
         print(f"{class_name} seed successfully!")
@@ -230,6 +227,7 @@ def get_route_content(controller_name: str, method: str, route_name: str):
 
 def get_test_case_content(name: str):
     from ..fpcli_settings import CONFIG_FOLDER
+
     return f"""
 from fastapi.testclient import TestClient
 from {CONFIG_FOLDER.lower()}.main import app  
