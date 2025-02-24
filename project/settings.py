@@ -56,4 +56,4 @@ def reload_settings() -> Settings:
     return Settings()  # Return the new instance of Settings
 
 
-settings=reload_settings()
+environment_variables=reload_settings()
