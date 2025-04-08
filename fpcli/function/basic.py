@@ -1,10 +1,17 @@
 import typer
-from ..template.cli_content import get_test_case_content, get_views_content, get_model_contant, get_validator_content, get_servie_content, get_route_content
+from ..template.cli_content import (
+    get_router_content,
+    get_test_case_content,
+    get_views_content,
+    get_model_content,
+    get_validator_content,
+    get_service_content,
+)
 from ..function.check_class import check_class
 from ..function.check_app import check_app
 
-def make_views(name: str, app_name: str ):
- 
+
+def make_views(name: str, app_name: str):
     # Directory paths
     app_dir = check_app(app_name=app_name)
     controllers_dir = app_dir / "views"
@@ -31,7 +38,6 @@ def make_views(name: str, app_name: str ):
 
 
 def make_model(name: str, app_name: str):
-
     app_dir = check_app(app_name=app_name)
     models_dir = app_dir / "models"
     # Capitalize the model name and generate file name
@@ -43,7 +49,7 @@ def make_model(name: str, app_name: str):
     check_class(file_path=file_path, app_name=app_name, class_name=class_name)
 
     # Model boilerplate content
-    content = get_model_contant(name=name,app_name=app_name)
+    content = get_model_content(name=name, app_name=app_name)
 
     # Ensure the models directory exists
     models_dir.mkdir(parents=True, exist_ok=True)
@@ -51,6 +57,7 @@ def make_model(name: str, app_name: str):
     # Write the model file
     file_path.write_text(content)
     typer.echo(f"Model '{class_name}' created successfully in '{file_path}'!")
+
 
 def make_schema(name: str, app_name: str):
     # Directory paths
@@ -74,8 +81,8 @@ def make_schema(name: str, app_name: str):
     file_path.write_text(content)
     typer.echo(f"Schema '{class_name}' created successfully in '{file_path}'!")
 
+
 def make_service(name: str, app_name: str):
-   
     # Directory paths
     app_dir = check_app(app_name=app_name)
 
@@ -92,42 +99,35 @@ def make_service(name: str, app_name: str):
 
     # Ensure the services directory exists
     services_dir.mkdir(parents=True, exist_ok=True)
-    content = get_servie_content(name=name)
+    content = get_service_content(name=name)
     # Write the service file
     file_path.write_text(content)
     typer.echo(f"Service '{class_name}' created successfully in '{file_path}'!")
 
 
-def make_routes(name: str, app_name: str, routes: list):
-
+def make_routes(name: str, app_name: str):
     # Directory paths
-    routes_folder = "http/v1"
-    app_dir = check_app(app_name)
-    routes_dir = app_dir / routes_folder
+    app_dir = check_app(app_name=app_name)
 
-    # Capitalize the controller name and generate the file name
-    controller_name = f"{name.capitalize()}Controller"
-    file_name = "urls.py"
+    routes_dir = app_dir / "routes"
+    # Capitalize the service name and generate file name
+    file_name = f"{name.lower()}_router.py"
     file_path = routes_dir / file_name
 
-    # Check if the route file already exists
-    check_class(file_path=file_path, app_name=app_name, class_name=controller_name)
+    # Check if the service file already exists
+    check_class(file_path=file_path, app_name=app_name, class_name=file_name)
 
-    # Generate route content
-    route_content = ""
-    for method, route in routes:
-        route_content += get_route_content(controller_name=controller_name, method=method, route_name=route) + "\n"
+    # Service boilerplate content
 
-    # Ensure the routes directory exists
+    # Ensure the services directory exists
     routes_dir.mkdir(parents=True, exist_ok=True)
+    content = get_router_content(name=name)
+    # Write the service file
+    file_path.write_text(content)
+    typer.echo(f"Router '{file_name}' created successfully in '{file_path}'!")
 
-    # Write the route file
-    file_path.write_text(f"""{route_content}""")
 
-    typer.echo(f"Routes for '{controller_name}' created successfully in '{file_path}'!")
-  
 def make_tests(name: str, app_name: str):
-   
     # Directory paths
     app_dir = check_app(app_name=app_name)
 
@@ -140,12 +140,9 @@ def make_tests(name: str, app_name: str):
     # Check if the service file already exists
     check_class(file_path=file_path, app_name=app_name, class_name=class_name)
 
-    # Service boilerplate content
-
     # Ensure the services directory exists
     services_dir.mkdir(parents=True, exist_ok=True)
     content = get_test_case_content(name=name)
     # Write the service file
     file_path.write_text(content)
     typer.echo(f"Service '{class_name}' created successfully in '{file_path}'!")
-

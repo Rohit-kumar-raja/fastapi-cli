@@ -35,28 +35,31 @@ class {class_name}:
         '''
 
 
-def get_model_contant(name: str, app_name: str = None):
+def get_model_content(name: str, app_name: str = "app"):
     class_name = f"{name.capitalize()}Model"
-    return f'''
-from typing import Optional
-from sqlmodel import SQLModel,Field
-from datetime import datetime
+    table_name = f"{app_name.lower()}_{name.lower()}"
+
+    return f'''from typing import List
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from .. import BaseModel
 
 
-class {class_name}(SQLModel,table=True):
-    """
-    {class_name} represents the schema for {app_name.lower()}_{name.lower()}.
-    """
-    __tablename__ = '{app_name.lower()}_{name.lower()}'
+class {class_name}(BaseModel):
+    \"\"\"
+    {class_name} represents the schema for {table_name}.
+    \"\"\"
 
-    id: int= Field(default=None, primary_key=True)
-    name: str
-    status: Optional[bool] = Field(True, description="Last update timestamp")
-    created_at: datetime = Field(default_factory=datetime.now, description="Creation timestamp")
-    updated_at: Optional[datetime] = Field(default=None, description="Last update timestamp")
-    deleted_at: Optional[datetime] = Field(default=None, description="Deletion timestamp")
-    
-    '''
+    __tablename__ = "{table_name}"
+
+    name: Mapped[str] = mapped_column(String, nullable=False)
+
+    # Example relationship: adjust or remove as needed
+    # related_items: Mapped[List["RelatedModel"]] = relationship(
+    #     back_populates="{name.lower()}s", secondary=SomeLinkModel.__table__
+    # )
+'''
+
 
 
 def get_validator_content(name: str):
@@ -74,67 +77,91 @@ class {class_name}(BaseModel):
     '''
 
 
-def get_servie_content(name: str):
+def get_service_content(name: str):
     class_name = f"{name.capitalize()}Service"
+    model_name = f"{name.capitalize()}Model"
+    lower_name = name.lower()
 
-    return f'''
-from typing import List, Optional
-from sqlmodel import select
+    return f'''from typing import List, Optional
 from uuid import UUID
-from ..models.{name.lower()}_model import {name.capitalize()}Model
-from .. import db
+from datetime import datetime
+from sqlalchemy import select, update
+from sqlalchemy.ext.asyncio import AsyncSession
 
-class {name.capitalize()}Service:
-    """
-    {name.capitalize()}Service handles the business logic and database operations for {name}.
-    """
+from ..models.{lower_name}_model import {model_name}
+
+
+class {class_name}:
+    \"\"\"
+    {class_name} handles the business logic and database operations for {name.capitalize()}.
+    \"\"\"
 
     @staticmethod
-    async def create(data: dict) -> {name.capitalize()}Model:
-        """Create a new {name.capitalize()}. """
-        async with db() as session:
-            instance = {name.capitalize()}Model(**data)
-            session.add(instance)
+    async def create(data: dict, session: AsyncSession) -> {model_name}:
+        """Create a new {name.capitalize()}."""
+        instance = {model_name}(**data)
+        session.add(instance)
+        await session.commit()
+        await session.refresh(instance)
+        return instance
+
+    @staticmethod
+    async def get_all(session: AsyncSession) -> List[{model_name}]:
+        """Fetch all active and non-deleted {name.capitalize()}s."""
+        statement = select({model_name}).where(
+            {model_name}.deleted_at.is_(None), {model_name}.is_active.is_(True)
+        )
+        result = await session.execute(statement)
+        return result.scalars().all()
+
+    @staticmethod
+    async def get_by_id(uuid: UUID, session: AsyncSession) -> Optional[{model_name}]:
+        """Fetch an active and non-deleted {name.capitalize()} by its UUID."""
+        statement = select({model_name}).where(
+            {model_name}.id == uuid,
+            {model_name}.deleted_at.is_(None),
+            {model_name}.is_active.is_(True),
+        )
+        result = await session.execute(statement)
+        return result.scalars().first()
+
+    @staticmethod
+    async def update(uuid: UUID, data: dict, session: AsyncSession) -> Optional[{model_name}]:
+        """Update an existing {name.capitalize()} if it is active and not deleted."""
+        async with session.begin():
+            data.pop("id", None)
+            statement = (
+                update({model_name})
+                .where(
+                    {model_name}.id == uuid,
+                    {model_name}.deleted_at.is_(None),
+                    {model_name}.is_active.is_(True),
+                )
+                .values(**data)
+            )
+            await session.execute(statement)
+        return await {class_name}.get_by_id(uuid, session)
+
+    @staticmethod
+    async def delete(uuid: UUID, session: AsyncSession) -> bool:
+        """Soft delete a {name.capitalize()} if it is active and not already deleted."""
+        instance = await session.get({model_name}, uuid)
+        if instance and instance.deleted_at is None and instance.is_active:
+            instance.deleted_at = datetime.now()
             await session.commit()
-            await session.refresh(instance)
-            return instance
+            return True
+        return False
 
     @staticmethod
-    async def get_all() -> List[{name.capitalize()}Model]:
-        """Fetch all {name}s."""
-        async with db() as session:
-            result = await session.execute(select({name.capitalize()}Model))
-            return result.scalars().all()
-
-    @staticmethod
-    async def get_by_id(uuid: UUID) -> Optional[{name.capitalize()}Model]:
-        """Fetch a {name} by its UUID."""
-        async with db() as session:
-            return await session.get({name.capitalize()}Model, uuid)
-
-    @staticmethod
-    async def update(uuid: UUID, data: dict) -> Optional[{name.capitalize()}Model]:
-        """Update an existing {name}."""
-        async with db() as session:
-            instance = session.get({name.capitalize()}Model, uuid)
-            if instance:
-                for key, value in data.items():
-                    setattr(instance, key, value)
-                await session.commit()
-                await session.refresh(instance)
-            return instance
-
-    @staticmethod
-    async def delete(uuid: UUID) -> bool:
-        """Delete a {name} by its UUID."""
-        async with db() as session:
-            instance = session.get({name.capitalize()}Model, uuid)
-            if instance:
-                await session.delete(instance)
-                await session.commit()
-                return True
-            return False
-    '''
+    async def is_unique(field_value: str, session: AsyncSession) -> bool:
+        """Check if a {name.capitalize()} with the same unique field already exists."""
+        statement = select({model_name}).where(
+            {model_name}.access == field_value,  # Change 'access' as needed
+            {model_name}.deleted_at.is_(None)
+        )
+        result = await session.execute(statement)
+        return result.scalars().first() is not None
+'''
 
 
 def get_middleware_content(name: str):
@@ -206,23 +233,68 @@ class {class_name}:
     '''
 
 
-def get_route_content(controller_name: str, method: str, route_name: str):
-    """
-    Generate FastAPI route snippet in the format of app_router.add_api_route.
+def get_router_content(name: str):
+    model = name.lower()
+    Model = name.capitalize()
+    model_plural = f"{model}s"
 
-    Args:
-        controller_name (str): The name of the controller (e.g., UserController).
-        method (str): HTTP method (GET, POST, PUT, DELETE, etc.).
-        route_name (str): The route name (e.g., '/user/', '/user/create').
+    return f'''
+from uuid import UUID
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.ext.asyncio import AsyncSession
+from ..schemas.{model}_schema import {Model}Schema
+from ..utils import error_response, response
+from ..services.{model}_service import {Model}Service
+from .. import get_db
 
-    Returns:
-        str: The generated route snippet in the desired format.
-    """
-    # Extract the controller method name dynamically
-    controller_method = route_name.strip("/").replace("/", "_")
+{model}_router = APIRouter(prefix="/{model_plural}", tags=["{model_plural}"])
 
-    # Generate the route content in app_router.add_api_route format
-    return f'app_router.add_api_route("{route_name}", {controller_name}().{controller_method}, methods={["{method}"]})'
+
+@{model}_router.get("", status_code=status.HTTP_200_OK)
+async def index(session: AsyncSession = Depends(get_db)):
+    """Get all {{model_plural}}"""
+    data = await {Model}Service().get_all(session)
+    if not data:
+        return await error_response(message="Data not found", status_code=404)
+    return await response(data=data, message="Data fetched successfully")
+
+
+@{model}_router.post("", status_code=status.HTTP_201_CREATED)
+async def create({model}: {Model}Schema, session: AsyncSession = Depends(get_db)):
+    """Create a new {model}"""
+    is_unique = await {Model}Service.is_unique({model}.name, session)  # Change `name` to unique field
+    if is_unique:
+        return await error_response(message="{Model} already exists", status_code=422)
+    response_data = await {Model}Service().create({model}.model_dump(), session)
+    return await response(data=response_data, message="Data created successfully")
+
+
+@{model}_router.get("/{"{uuid}"}", status_code=status.HTTP_200_OK)
+async def edit(uuid: UUID, session: AsyncSession = Depends(get_db)):
+    """Get {model} by UUID"""
+    data = await {Model}Service.get_by_id(uuid, session)
+    if not data:
+        return await error_response(message="Data not found", status_code=404)
+    return await response(data=data, message="Data fetched successfully")
+
+
+@{model}_router.put("/{"{uuid}"}", status_code=status.HTTP_200_OK)
+async def update({model}: {Model}Schema, uuid: UUID, session: AsyncSession = Depends(get_db)):
+    """Update {model} by UUID"""
+    data = await {Model}Service().update(uuid, {model}.model_dump(), session)
+    return await response(data=data, message="Data updated successfully")
+
+
+@{model}_router.delete("/{"{uuid}"}", status_code=status.HTTP_204_NO_CONTENT)
+async def destroy(uuid: UUID, session: AsyncSession = Depends(get_db)):
+    """Delete {model} by UUID"""
+    data = await {Model}Service().delete(uuid, session)
+    if data:
+        return await response(data=data, message="Data deleted successfully")
+    else:
+        return await error_response(message="Data not found", status_code=404)
+
+'''
 
 
 def get_test_case_content(name: str):

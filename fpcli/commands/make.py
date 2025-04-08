@@ -148,13 +148,13 @@ def make_seeder(name: str,app_name:str):
 
    
 @make.command("make:routes")
-def create_routes(name: str, app_name: str, routes: str):
+def create_routes(name: str, app_name: str):
     """
     Generate route file with user-defined routes inside a specific app.
     Routes should be passed as a  string.
     Example: 'GET,POST,PUT'
     """
-    # make_routes(name, app_name, routes)
+    make_routes(name, app_name=app_name)
     
 
 @make.command("make:test")

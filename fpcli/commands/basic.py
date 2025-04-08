@@ -1,12 +1,8 @@
 
-from pathlib import Path
 import typer
 from ..template.cli_content import *
 from ..fpcli_settings import CONFIG_FOLDER
 import socket
-import typer
-
-
 app= typer.Typer()
 
 
