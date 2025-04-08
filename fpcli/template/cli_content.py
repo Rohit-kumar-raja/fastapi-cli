@@ -2,7 +2,7 @@ from pydoc import classname
 
 
 def get_views_content(name: str):
-    class_name = f"{name.capitalize()}View"
+    class_name = f"{"".join([text.capitalize() for text in name.split("_")])}View"
     return f'''
 from fastapi import Request
 
@@ -36,7 +36,7 @@ class {class_name}:
 
 
 def get_model_content(name: str, app_name: str = "app"):
-    class_name = f"{name.capitalize()}Model"
+    class_name = f"{"".join([text.capitalize() for text in name.split("_")])}Model"
     table_name = f"{app_name.lower()}_{name.lower()}"
 
     return f'''from typing import List
@@ -63,7 +63,7 @@ class {class_name}(BaseModel):
 
 
 def get_validator_content(name: str):
-    class_name = f"{name.capitalize()}Schema"
+    class_name = f"{"".join([text.capitalize() for text in name.split("_")])}Schema"
     return f'''
 from pydantic import BaseModel, Field
 from typing import Optional
@@ -78,8 +78,8 @@ class {class_name}(BaseModel):
 
 
 def get_service_content(name: str):
-    class_name = f"{name.capitalize()}Service"
-    model_name = f"{name.capitalize()}Model"
+    class_name = f"{"".join([text.capitalize() for text in name.split("_")])}Service"
+    model_name = f"{"".join([text.capitalize() for text in name.split("_")])}Model"
     lower_name = name.lower()
 
     return f'''from typing import List, Optional
@@ -165,7 +165,7 @@ class {class_name}:
 
 
 def get_middleware_content(name: str):
-    class_name = f"{name.capitalize()}Middleware"
+    class_name = f"{"".join([text.capitalize() for text in name.split("_")])}Middleware"
 
     return f'''
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -199,8 +199,8 @@ class {class_name}(BaseHTTPMiddleware):
 
 
 def get_seeder_content(name: str, app_name: str):
-    class_name = f"{name.capitalize()}Seeder"
-    service_name = f"{name.capitalize()}Service"
+    class_name = f"{"".join([text.capitalize() for text in name.split("_")])}Seeder"
+    service_name = f"{"".join([text.capitalize() for text in name.split("_")])}Service"
     return f'''
 from ..services.{name.lower()}_service import {service_name}
 
