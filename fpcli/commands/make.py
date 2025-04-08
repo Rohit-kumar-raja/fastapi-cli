@@ -10,42 +10,40 @@ make=typer.Typer()
 
 
 
-@make.command("make:view")
-def view(name: str, app_name: str , 
-               sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
-               s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.GREEN,bold=True) } "),
-               m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean Model { typer.style('Model',typer.colors.BRIGHT_RED,bold=True) } "),
-               r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } ")):
+# @make.command("make:view")
+# def view(name: str, app_name: str , 
+#                sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
+#                s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.GREEN,bold=True) } "),
+#                m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean Model { typer.style('Model',typer.colors.BRIGHT_RED,bold=True) } "),
+#                r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } ")):
     
-    """
-    Generate a FastAPI controller file with a user-defined name inside a specific app.
-    """
-    if(m):
-        print(m,s,r)
+#     """
+#     Generate a FastAPI controller file with a user-defined name inside a specific app.
+#     """
+#     if(m):
+#         print(m,s,r)
 
-    make_views(name=name,app_name=app_name)
-    if(m):
-        make_model(name=name,app_name=app_name)
-    if(s):
-        make_service(name=name,app_name=app_name)
-    if(sc):
-        make_schema(name=name,app_name=app_name)
-    if(r):
-        make_routes(name=name,app_name=app_name)
+#     make_views(name=name,app_name=app_name)
+#     if(m):
+#         make_model(name=name,app_name=app_name)
+#     if(s):
+#         make_service(name=name,app_name=app_name)
+#     if(sc):
+#         make_schema(name=name,app_name=app_name)
+#     if(r):
+#         make_routes(name=name,app_name=app_name)
 
 @make.command("make:model")
 def model(name: str, app_name: str , 
                sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
                s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.GREEN,bold=True) } "),
-               v: bool=typer.Option(False,help=f"for Creating the View you can pass V. V means  { typer.style('View',typer.colors.YELLOW,bold=True) } "),
                r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } ")):
     """
     Generate a Beanie ODM model file with a user-defined name inside a specific app.
     """
     
     make_model(name=name,app_name=app_name)
-    if(v):
-        make_views(name=name,app_name=app_name)
+
     if(s):
         make_service(name=name,app_name=app_name)
     if(sc):
@@ -57,7 +55,6 @@ def model(name: str, app_name: str ,
 
 @make.command("make:schema")
 def schema(name: str, app_name: str , 
-               v: bool=typer.Option(False,help=f"for Creating the Views you can pass v. v means { typer.style('View',typer.colors.BRIGHT_YELLOW,bold=True) } "),
                s: bool=typer.Option(False,help=f"for Creating the Service you can pass S. S mean  { typer.style('Service',typer.colors.YELLOW,bold=True) } "),
                m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean Model { typer.style('Service',typer.colors.BRIGHT_RED,bold=True) } "),
                r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass r. r mean  { typer.style('Resource',typer.colors.BRIGHT_RED,bold=True) } ")):
@@ -65,8 +62,6 @@ def schema(name: str, app_name: str ,
     Generate a Pydantic validator file with a user-defined name inside a specific app.
     """
     make_schema(name=name,app_name=app_name)
-    if(v):
-        make_views(name=name,app_name=app_name)
     if(s):
         make_service(name=name,app_name=app_name)
     if(m):
@@ -76,7 +71,6 @@ def schema(name: str, app_name: str ,
 
 @make.command("make:service")
 def service(name: str, app_name: str , 
-               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style('Validator',typer.colors.YELLOW,bold=True) }   "),
                m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean  { typer.style('Model',typer.colors.GREEN,bold=True) } "),
                sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
                r: bool=typer.Option(False,help=f"for Creating the all Routes you can pass S. S mean  { typer.style('Resource',typer.colors.BRIGHT_BLUE,bold=True) } ")):
@@ -84,8 +78,6 @@ def service(name: str, app_name: str ,
     Generate a service class file with a user-defined name inside a specific app.
     """
     make_service(name=name,app_name=app_name)
-    if(v):
-        make_views(name=name,app_name=app_name)
     if(m):
         make_model(name=name,app_name=app_name)
     if(sc):
@@ -167,7 +159,6 @@ def create_routes(name: str, app_name: str, routes: str):
 
 @make.command("make:test")
 def make_test(name: str, app_name: str , 
-               v: bool=typer.Option(False,help=f"for Creating the Validator you can pass V. V mean { typer.style('Validator',typer.colors.YELLOW,bold=True) }   "),
                s: bool=typer.Option(False,help=f"for Creating the Validator you can pass S. S mean { typer.style('Service',typer.colors.BRIGHT_MAGENTA,bold=True) }   "),
                m: bool=typer.Option(False,help=f"for Creating the Model you can pass M. M mean  { typer.style('Model',typer.colors.GREEN,bold=True) } "),
                sc: bool=typer.Option(False,help=f"for Creating the Schema for data validation you can pass Sc. Sc mean { typer.style('Schema',typer.colors.YELLOW,bold=True) }   "),
@@ -182,8 +173,6 @@ def make_test(name: str, app_name: str ,
         make_tests(name=name,app_name=app_name)
     if(s):
         make_service(name=name,app_name=app_name)
-    if(v):
-        make_views(name=name,app_name=app_name)
     if(m):
         make_model(name=name,app_name=app_name)
     if(sc):
