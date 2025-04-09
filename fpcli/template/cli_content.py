@@ -107,20 +107,14 @@ class {class_name}:
     @staticmethod
     async def get_all(session: AsyncSession) -> List[{model_name}]:
         """Fetch all active and non-deleted {name.capitalize()}s."""
-        statement = select({model_name}).where(
-            {model_name}.deleted_at.is_(None), {model_name}.is_active.is_(True)
-        )
+        statement = select({model_name}).filter_by(deleted_at=None, is_active=True)
         result = await session.execute(statement)
         return result.scalars().all()
 
     @staticmethod
     async def get_by_id(uuid: UUID, session: AsyncSession) -> Optional[{model_name}]:
         """Fetch an active and non-deleted {name.capitalize()} by its UUID."""
-        statement = select({model_name}).where(
-            {model_name}.id == uuid,
-            {model_name}.deleted_at.is_(None),
-            {model_name}.is_active.is_(True),
-        )
+        statement = select({model_name}).filter_by(id=uuid, deleted_at=None, is_active=True)
         result = await session.execute(statement)
         return result.scalars().first()
 
@@ -131,11 +125,7 @@ class {class_name}:
             data.pop("id", None)
             statement = (
                 update({model_name})
-                .where(
-                    {model_name}.id == uuid,
-                    {model_name}.deleted_at.is_(None),
-                    {model_name}.is_active.is_(True),
-                )
+                .filter_by(id=uuid, deleted_at=None, is_active=True)
                 .values(**data)
             )
             await session.execute(statement)
@@ -154,10 +144,7 @@ class {class_name}:
     @staticmethod
     async def is_unique(field_value: str, session: AsyncSession) -> bool:
         """Check if a {name.capitalize()} with the same unique field already exists."""
-        statement = select({model_name}).where(
-            {model_name}.access == field_value,  # Change 'access' as needed
-            {model_name}.deleted_at.is_(None)
-        )
+        statement = select({model_name}).filter_by(name=field_value, deleted_at=None)
         result = await session.execute(statement)
         return result.scalars().first() is not None
 '''
