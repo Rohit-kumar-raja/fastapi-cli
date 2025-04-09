@@ -2,7 +2,7 @@ from pydoc import classname
 
 
 def get_views_content(name: str):
-    class_name = f"{"".join([text.capitalize() for text in name.split("_")])}View"
+    class_name = f"{''.join([text.capitalize() for text in name.split('_')])}View"
     return f'''
 from fastapi import Request
 
@@ -36,7 +36,7 @@ class {class_name}:
 
 
 def get_model_content(name: str, app_name: str = "app"):
-    class_name = f"{"".join([text.capitalize() for text in name.split("_")])}Model"
+    class_name = f"{''.join([text.capitalize() for text in name.split('_')])}Model"
     table_name = f"{app_name.lower()}_{name.lower()}"
 
     return f'''from typing import List
@@ -61,9 +61,8 @@ class {class_name}(BaseModel):
 '''
 
 
-
 def get_validator_content(name: str):
-    class_name = f"{"".join([text.capitalize() for text in name.split("_")])}Schema"
+    class_name = f"{''.join([text.capitalize() for text in name.split('_')])}Schema"
     return f'''
 from pydantic import BaseModel, Field
 from typing import Optional
@@ -78,8 +77,8 @@ class {class_name}(BaseModel):
 
 
 def get_service_content(name: str):
-    class_name = f"{"".join([text.capitalize() for text in name.split("_")])}Service"
-    model_name = f"{"".join([text.capitalize() for text in name.split("_")])}Model"
+    class_name = f"{''.join([text.capitalize() for text in name.split('_')])}Service"
+    model_name = f"{''.join([text.capitalize() for text in name.split('_')])}Model"
     lower_name = name.lower()
 
     return f'''from typing import List, Optional
@@ -165,7 +164,7 @@ class {class_name}:
 
 
 def get_middleware_content(name: str):
-    class_name = f"{"".join([text.capitalize() for text in name.split("_")])}Middleware"
+    class_name = f"{''.join([text.capitalize() for text in name.split('_')])}Middleware"
 
     return f'''
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -199,8 +198,8 @@ class {class_name}(BaseHTTPMiddleware):
 
 
 def get_seeder_content(name: str, app_name: str):
-    class_name = f"{"".join([text.capitalize() for text in name.split("_")])}Seeder"
-    service_name = f"{"".join([text.capitalize() for text in name.split("_")])}Service"
+    class_name = f"{''.join([text.capitalize() for text in name.split('_')])}Seeder"
+    service_name = f"{''.join([text.capitalize() for text in name.split('_')])}Service"
     return f'''
 from ..services.{name.lower()}_service import {service_name}
 
@@ -235,7 +234,7 @@ class {class_name}:
 
 def get_router_content(name: str):
     model = name.lower()
-    Model = name.capitalize()
+    Model = "".join([text.capitalize() for text in name.split("_")])
     model_plural = f"{model}s"
 
     return f'''
@@ -253,7 +252,7 @@ from .. import get_db
 @{model}_router.get("", status_code=status.HTTP_200_OK)
 async def index(session: AsyncSession = Depends(get_db)):
     """Get all {{model_plural}}"""
-    data = await {Model}Service().get_all(session)
+    data = await {Model}Service.get_all(session)
     if not data:
         return await error_response(message="Data not found", status_code=404)
     return await response(data=data, message="Data fetched successfully")
@@ -265,7 +264,7 @@ async def create({model}: {Model}Schema, session: AsyncSession = Depends(get_db)
     is_unique = await {Model}Service.is_unique({model}.name, session)  # Change `name` to unique field
     if is_unique:
         return await error_response(message="{Model} already exists", status_code=422)
-    response_data = await {Model}Service().create({model}.model_dump(), session)
+    response_data = await {Model}Service.create({model}.model_dump(), session)
     return await response(data=response_data, message="Data created successfully")
 
 
@@ -281,14 +280,14 @@ async def edit(uuid: UUID, session: AsyncSession = Depends(get_db)):
 @{model}_router.put("/{"{uuid}"}", status_code=status.HTTP_200_OK)
 async def update({model}: {Model}Schema, uuid: UUID, session: AsyncSession = Depends(get_db)):
     """Update {model} by UUID"""
-    data = await {Model}Service().update(uuid, {model}.model_dump(), session)
+    data = await {Model}Service.update(uuid, {model}.model_dump(), session)
     return await response(data=data, message="Data updated successfully")
 
 
 @{model}_router.delete("/{"{uuid}"}", status_code=status.HTTP_204_NO_CONTENT)
 async def destroy(uuid: UUID, session: AsyncSession = Depends(get_db)):
     """Delete {model} by UUID"""
-    data = await {Model}Service().delete(uuid, session)
+    data = await {Model}Service.delete(uuid, session)
     if data:
         return await response(data=data, message="Data deleted successfully")
     else:
