@@ -292,7 +292,7 @@ async def destroy(uuid: UUID, session: AsyncSession = Depends(get_db)):
     else:
         return await error_response(message="Data not found", status_code=404)
 
-@{model}_router.delete("/datatables", status_code=status.HTTP_200_OK)
+@{model}_router.post("/datatables", status_code=status.HTTP_200_OK)
 async def datatables(request_data: DataTablesRequest, session: AsyncSession = Depends(get_db)):
     """Get all"""
     data =  data = await {Model}Service.datatables(session, request_data)
