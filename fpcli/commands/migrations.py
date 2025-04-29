@@ -15,7 +15,7 @@ def makemigrations(message: str = "Auto migration" ,     m: bool = typer.Option(
 
         typer.echo(f"🚀 Generating migration in {full_message} ...")
 
-        subprocess.run(["alembic",  "revision", "--autogenerate", "-m", full_message], check=True)
+        subprocess.run(["alembic",  "revision", "--autogenerate", "-rev-id", full_message], check=True)
 
         typer.echo("✅ Migration generated successfully.")
 
