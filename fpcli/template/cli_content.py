@@ -88,6 +88,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..models.{lower_name}_model import {model_name}
+from .. import DataTables, DataTablesRequest
 
 
 class {class_name}:
@@ -147,6 +148,17 @@ class {class_name}:
         statement = select({model_name}).filter_by(name=field_value, deleted_at=None)
         result = await session.execute(statement)
         return result.scalars().first() is not None
+    
+    @staticmethod
+    async def datatables(session: AsyncSession, request_data: DataTablesRequest) -> List[{model_name}]:
+        """Fetch all active and non-deleted Plc_connection_tags."""
+        statement = (
+            select({model_name})
+            .filter_by(deleted_at=None, is_active=True)
+        )
+        datatables = DataTables(session, {model_name}, statement)
+        return await datatables.process(request_data=request_data)
+    
 '''
 
 
@@ -231,12 +243,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from ..schemas.{model}_schema import {Model}Schema
 from ..utils import error_response, response
 from ..services.{model}_service import {Model}Service
-from .. import get_db
+from .. import get_db ,DataTablesRequest
 
 {model}_router = APIRouter(prefix="/{model_plural}", tags=["{model_plural}"])
 
 
-@{model}_router.get("", status_code=status.HTTP_200_OK)
+@{model}_router.get("", status_code=status.HTTP_200_OK )
 async def index(session: AsyncSession = Depends(get_db)):
     """Get all {{model_plural}}"""
     data = await {Model}Service.get_all(session)
@@ -271,7 +283,7 @@ async def update({model}: {Model}Schema, uuid: UUID, session: AsyncSession = Dep
     return await response(data=data, message="Data updated successfully")
 
 
-@{model}_router.delete("/{"{uuid}"}", status_code=status.HTTP_204_NO_CONTENT)
+@{model}_router.delete("/{"{uuid}"}", status_code=status.HTTP_200_OK)
 async def destroy(uuid: UUID, session: AsyncSession = Depends(get_db)):
     """Delete {model} by UUID"""
     data = await {Model}Service.delete(uuid, session)
@@ -279,6 +291,14 @@ async def destroy(uuid: UUID, session: AsyncSession = Depends(get_db)):
         return await response(data=data, message="Data deleted successfully")
     else:
         return await error_response(message="Data not found", status_code=404)
+
+@{model}_router.delete("/datatables", status_code=status.HTTP_200_OK)
+async def datatables(request_data: DataTablesRequest, session: AsyncSession = Depends(get_db)):
+    """Get all"""
+    data =  data = await {Model}Service.datatables(session, request_data)
+    if not data:
+        return await error_response(message="Data not found", status_code=404)
+    return await response(data=data, message="Data fetched successfully")
 
 '''
 
